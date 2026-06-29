@@ -17,9 +17,9 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install black isort flake8
-      - run: echo "Skipping Black formatting check"
+      - run: echo "Skipping Black formatting checks"
       - run: isort --check-only src/ tests/
-      - run: echo "Skipping flake8 check"
+     # - run: flake8 src/ tests/ --max-line-length=100 --extend-ignore=E203,W503
 
   test:
     name: Unit Tests (Python ${{ matrix.python-version }})
