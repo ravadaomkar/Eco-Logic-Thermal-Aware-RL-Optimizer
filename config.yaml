@@ -1,0 +1,85 @@
+# eco-logic/config.yaml
+project:
+  name: "Eco-Logic Thermal-Aware RL Optimizer"
+  version: "2.1.0"
+  author: "Innomatics Research Labs"
+
+datacenter:
+  rack_rows: 8
+  rack_cols: 8
+  ambient_temp_c: 22.0
+  critical_temp_c: 85.0
+  target_pue: 1.20
+  baseline_pue: 1.61
+
+rl:
+  agent: "qlearning"
+  episodes: 200
+  max_steps_per_episode: 500
+  cooling_budget: 0.75
+  qlearning:
+    alpha: 0.10
+    gamma: 0.95
+    epsilon: 1.0
+    epsilon_min: 0.05
+    epsilon_decay: 0.995
+    n_temp_bins: 10
+    n_pue_bins: 10
+  dqn:
+    learning_rate: 0.001
+    gamma: 0.99
+    epsilon: 1.0
+    epsilon_min: 0.05
+    epsilon_decay: 0.998
+    batch_size: 64
+    target_update_freq: 500
+    buffer_capacity: 50000
+    hidden_size: 256
+  checkpoints:
+    save_every: 50
+    eval_every: 25
+    directory: "checkpoints/"
+
+reward:
+  pue_scale: 20.0
+  temp_scale: 0.5
+  power_penalty: 0.01
+  safe_zone_bonus: 15.0
+  efficiency_milestone: 30.0
+  critical_penalty: 50.0
+  density_bonus: 5.0
+
+digital_twin:
+  seq_len: 30
+  hidden_size: 128
+  num_layers: 2
+  dropout: 0.2
+  epochs: 30
+  batch_size: 128
+  learning_rate: 0.001
+  spike_threshold_c: 78.0
+  checkpoint: "checkpoints/twin.pt"
+
+dell_ome:
+  host: ""
+  username: "admin"
+  verify_ssl: false
+  timeout_s: 30
+  poll_interval_s: 30
+
+database:
+  host: "localhost"
+  port: 3306
+  name: "ecologic"
+  pool_size: 5
+
+prometheus:
+  enabled: true
+  port: 8000
+  scrape_interval_s: 15
+
+logging:
+  level: "INFO"
+  file: "logs/ecologic.log"
+  max_bytes: 10485760
+  backup_count: 5

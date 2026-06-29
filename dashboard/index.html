@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eco-Logic: Thermal-Aware RL Optimizer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #050a0e;
+    --panel: #0b1520;
+    --border: #1a3040;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #39ff14;
+    --warn: #ffb800;
+    --text: #c8dde8;
+    --dim: #4a6a7a;
+    --hot: #ff2d2d;
+    --cool: #00b4d8;
+    --glow: rgba(0,229,255,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  .logo-area h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+  }
+
+  .logo-area p {
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .status-bar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .status-chip {
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .status-chip.live { border-color: var(--accent3); color: var(--accent3); animation: blink 1.5s infinite; }
+  .status-chip.dell { border-color: var(--dim); color: var(--dim); }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* KPI Row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .kpi {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+
+  .kpi.pue::before { background: var(--accent3); }
+  .kpi.gpu::before { background: var(--accent); }
+  .kpi.temp::before { background: var(--accent2); }
+  .kpi.deal::before { background: var(--warn); }
+  .kpi.ep::before { background: #b44dff; }
+
+  .kpi-label { font-size: 0.6rem; color: var(--dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .kpi-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .kpi-sub { font-size: 0.6rem; color: var(--dim); margin-top: 4px; }
+  .kpi-delta { font-size: 0.7rem; margin-top: 2px; }
+  .kpi-delta.good { color: var(--accent3); }
+  .kpi-delta.bad { color: var(--hot); }
+
+  /* Main Grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 16px;
+    position: relative;
+  }
+
+  .panel-title {
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Thermal Heatmap */
+  #heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
+  }
+
+  .rack-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.45rem;
+    color: rgba(255,255,255,0.7);
+    font-weight: bold;
+  }
+
+  .rack-cell:hover { transform: scale(1.15); z-index: 10; }
+
+  .rack-cell.selected { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  /* Thermal legend */
+  .thermal-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 6px;
+  }
+
+  .legend-bar {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #00b4d8, #39ff14, #ffb800, #ff2d2d);
+  }
+
+  .legend-labels { display: flex; justify-content: space-between; font-size: 0.55rem; color: var(--dim); margin-top: 3px; }
+
+  /* RL Chart */
+  canvas { width: 100%; display: block; }
+
+  /* Workload Table */
+  .wl-table { width: 100%; border-collapse: collapse; font-size: 0.65rem; }
+  .wl-table th { text-align: left; padding: 6px 8px; color: var(--dim); font-weight: 400; border-bottom: 1px solid var(--border); letter-spacing: 1px; text-transform: uppercase; font-size: 0.55rem; }
+  .wl-table td { padding: 7px 8px; border-bottom: 1px solid rgba(26,48,64,0.5); }
+  .wl-table tr:hover td { background: rgba(0,229,255,0.03); }
+
+  .badge {
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge.ml { background: rgba(0,229,255,0.15); color: var(--accent); }
+  .badge.db { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .badge.inf { background: rgba(57,255,20,0.15); color: var(--accent3); }
+  .badge.vid { background: rgba(180,77,255,0.15); color: #b44dff; }
+
+  .temp-pill {
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 0.6rem;
+    font-weight: bold;
+  }
+
+  /* Bottom row */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* RL Episode Log */
+  .episode-log {
+    height: 180px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .ep-row {
+    display: grid;
+    grid-template-columns: 50px 60px 70px 70px 1fr;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(26,48,64,0.3);
+    font-size: 0.6rem;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn { from {opacity:0; transform: translateY(-4px)} to {opacity:1; transform: none} }
+
+  .ep-reward { font-family: 'Syne', sans-serif; font-weight: 700; }
+  .ep-reward.good { color: var(--accent3); }
+  .ep-reward.ok { color: var(--warn); }
+  .ep-reward.bad { color: var(--hot); }
+
+  /* Prometheus Metrics */
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(26,48,64,0.3);
+    font-size: 0.65rem;
+  }
+
+  .metric-name { color: var(--dim); }
+  .metric-val { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); }
+
+  .spark-bar {
+    width: 80px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .spark-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 8px 20px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+  }
+
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--bg); }
+
+  .btn span { position: relative; z-index: 1; }
+
+  .btn.danger { border-color: var(--hot); color: var(--hot); }
+  .btn.danger::before { background: var(--hot); }
+
+  .btn.success { border-color: var(--accent3); color: var(--accent3); }
+  .btn.success::before { background: var(--accent3); }
+
+  .slider-group { display: flex; align-items: center; gap: 10px; font-size: 0.65rem; color: var(--dim); }
+  .slider-group input[type=range] { width: 100px; accent-color: var(--accent); }
+  .slider-group span { color: var(--accent); font-weight: bold; min-width: 30px; }
+
+  /* Digital Twin Accuracy */
+  .accuracy-ring {
+    width: 100px; height: 100px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .accuracy-ring svg { transform: rotate(-90deg); }
+  .accuracy-ring .center-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+
+  .twin-stats { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .twin-row { display: flex; justify-content: space-between; font-size: 0.62rem; }
+  .twin-row .label { color: var(--dim); }
+  .twin-row .val { color: var(--text); font-weight: bold; }
+
+  .flex-center { display: flex; align-items: center; gap: 16px; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+
+  .pulse { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    padding: 8px 12px;
+    font-size: 0.62rem;
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+    max-width: 180px;
+  }
+
+  .tooltip.visible { display: block; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-area">
+      <h1>⬡ ECO-LOGIC: THERMAL-AWARE RL OPTIMIZER</h1>
+      <p>Dell PowerCool Infrastructure · OpenManage Enterprise · Prometheus Telemetry</p>
+    </div>
+    <div class="status-bar">
+      <div class="status-chip dell">DELL POWERCOOL</div>
+      <div class="status-chip live">● LIVE SIM</div>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn" id="startBtn" onclick="toggleSim()"><span id="btnText">▶ START OPTIMIZER</span></button>
+    <button class="btn success" onclick="runEpisode()"><span>⚡ RUN EPISODE</span></button>
+    <button class="btn danger" onclick="resetAll()"><span>↺ RESET</span></button>
+    <div class="slider-group">
+      <label>COOLING BUDGET</label>
+      <input type="range" min="50" max="100" value="75" id="coolingSlider" oninput="updateCooling(this.value)">
+      <span id="coolingVal">75%</span>
+    </div>
+    <div class="slider-group">
+      <label>WORKLOAD INTENSITY</label>
+      <input type="range" min="1" max="10" value="5" id="intensitySlider" oninput="updateIntensity(this.value)">
+      <span id="intensityVal">5</span>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi pue">
+      <div class="kpi-label">PUE (Power Usage Eff.)</div>
+      <div class="kpi-val" id="pue" style="color:var(--accent3)">1.61</div>
+      <div class="kpi-sub">Target: 1.2</div>
+      <div class="kpi-delta good" id="pue-delta">▼ Optimizing...</div>
+    </div>
+    <div class="kpi gpu">
+      <div class="kpi-label">GPU Rack Density ↑</div>
+      <div class="kpi-val" id="gpuDensity" style="color:var(--accent)">1.0x</div>
+      <div class="kpi-sub">Target: 4x</div>
+      <div class="kpi-delta good" id="gpu-delta">▲ Growing</div>
+    </div>
+    <div class="kpi temp">
+      <div class="kpi-label">Avg Rack Temp</div>
+      <div class="kpi-val" id="avgTemp" style="color:var(--accent2)">68°C</div>
+      <div class="kpi-sub">Critical: 85°C</div>
+      <div class="kpi-delta" id="temp-delta">— Stable</div>
+    </div>
+    <div class="kpi deal">
+      <div class="kpi-label">Deals Unblocked</div>
+      <div class="kpi-val" id="deals" style="color:var(--warn)">$0M</div>
+      <div class="kpi-sub">Target: $50M+</div>
+      <div class="kpi-delta good" id="deals-delta">Awaiting optimization</div>
+    </div>
+    <div class="kpi ep">
+      <div class="kpi-label">RL Episodes Run</div>
+      <div class="kpi-val" id="episodes" style="color:#b44dff">0</div>
+      <div class="kpi-sub">Reward: —</div>
+      <div class="kpi-delta good" id="ep-delta">Ready</div>
+    </div>
+  </div>
+
+  <!-- Main 3-col grid -->
+  <div class="main-grid">
+
+    <!-- Thermal Heatmap -->
+    <div class="panel">
+      <div class="panel-title">🌡 Rack Thermal Heatmap (8×8)</div>
+      <div id="heatmap-grid"></div>
+      <div class="thermal-legend">
+        <span style="font-size:0.55rem;color:var(--dim)">COOL</span>
+        <div style="flex:1">
+          <div class="legend-bar"></div>
+          <div class="legend-labels"><span>30°C</span><span>50°C</span><span>70°C</span><span>85°C+</span></div>
+        </div>
+        <span style="font-size:0.55rem;color:var(--dim)">HOT</span>
+      </div>
+    </div>
+
+    <!-- RL Training Chart -->
+    <div class="panel">
+      <div class="panel-title">📈 RL Reward Curve</div>
+      <canvas id="rlChart" height="160"></canvas>
+      <div style="display:flex;justify-content:space-between;font-size:0.6rem;color:var(--dim);margin-top:8px">
+        <span>Episode →</span>
+        <span id="bestReward">Best: —</span>
+        <span>Reward →</span>
+      </div>
+    </div>
+
+    <!-- PUE Trend -->
+    <div class="panel">
+      <div class="panel-title">⚡ PUE & Temp Trend</div>
+      <canvas id="pueChart" height="160"></canvas>
+      <div style="display:flex;gap:16px;margin-top:8px;font-size:0.6rem">
+        <span style="color:var(--accent3)">■ PUE</span>
+        <span style="color:var(--accent2)">■ Avg Temp (°C/10)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="bottom-grid">
+
+    <!-- Workload Placement Table -->
+    <div class="panel">
+      <div class="panel-title">🖥 Workload Placement (RL Policy)</div>
+      <table class="wl-table">
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>Type</th>
+            <th>Rack</th>
+            <th>Temp</th>
+            <th>Power</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="wlBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Right column: Digital Twin + Prometheus -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Digital Twin -->
+      <div class="panel">
+        <div class="panel-title">🧬 Digital Twin Accuracy</div>
+        <div class="flex-center">
+          <div class="accuracy-ring">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="8"/>
+              <circle id="accuracyArc" cx="50" cy="50" r="40" fill="none" stroke="var(--accent)" stroke-width="8"
+                stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-linecap="round"/>
+            </svg>
+            <div class="center-text">
+              <span id="accuracyPct" style="font-size:1.2rem;color:var(--accent)">75%</span>
+              <span style="font-size:0.55rem;color:var(--dim)">ACC</span>
+            </div>
+          </div>
+          <div class="twin-stats">
+            <div class="twin-row"><span class="label">Thermal Spike Pred</span><span class="val" id="spikePred">71%</span></div>
+            <div class="twin-row"><span class="label">PUE Forecast Error</span><span class="val" id="pueError">±0.08</span></div>
+            <div class="twin-row"><span class="label">Training Samples</span><span class="val" id="samples">0</span></div>
+            <div class="twin-row"><span class="label">Model Iterations</span><span class="val" id="modelIter">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prometheus Metrics -->
+      <div class="panel">
+        <div class="panel-title">📡 Prometheus / OpenManage Metrics</div>
+        <div class="metric-row">
+          <span class="metric-name">powercool_liquid_flow_l_per_min</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="spark-bar"><div class="spark-fill" id="flowBar" style="width:65%;background:var(--cool)"></div></div>
+            <span class="metric-val" id="flowMetric">—</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">rack_inlet_temp_celsius</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="spark-bar"><div class="spark-fill" id="inletBar" style="width:40%;background:var(--accent2)"></div></div>
+            <span class="metric-val" id="inletMetric">—</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">datacenter_pue_ratio</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="spark-bar"><div class="spark-fill" id="pueBar" style="width:80%;background:var(--accent3)"></div></div>
+            <span class="metric-val" id="pueMetric">—</span>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">gpu_utilization_percent</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="spark-bar"><div class="spark-fill" id="gpuBar" style="width:50%;background:#b44dff"></div></div>
+            <span class="metric-val" id="gpuMetric">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Episode Log -->
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-title">🤖 RL Episode Log (Q-Learning · State: Temp×Power · Action: Rack Placement)</div>
+    <div class="episode-log" id="episodeLog">
+      <div style="color:var(--dim);font-size:0.65rem;padding:20px 0;text-align:center">
+        Start optimizer to begin training…
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>ECO-LOGIC v2.1 · DELL POWERCOOL INTEGRATION · OPENMANAGE ENTERPRISE REST API</span>
+    <span class="pulse" id="footerStatus">● IDLE</span>
+    <span>INNOMATICS RESEARCH LABS · GEN AI INTERNSHIP PROJECT</span>
+  </footer>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ============================================================
+// SIMULATION STATE
+// ============================================================
+const RACKS = 64; // 8x8
+const RACK_ROWS = 8, RACK_COLS = 8;
+
+let state = {
+  running: false,
+  interval: null,
+  episode: 0,
+  step: 0,
+  pue: 1.61,
+  avgTemp: 68,
+  gpuDensity: 1.0,
+  deals: 0,
+  coolingBudget: 75,
+  intensity: 5,
+  accuracy: 75,
+  rackTemps: [],
+  rackPowers: [],
+  rackWorkloads: [],
+  rewards: [],
+  pueHistory: [],
+  tempHistory: [],
+  totalSamples: 0,
+  modelIter: 0,
+};
+
+// Workload types
+const WL_TYPES = ['ML', 'DB', 'INF', 'VID'];
+const WL_COLORS = {ML:'ml', DB:'db', INF:'inf', VID:'vid'};
+
+// Initialize rack grid
+function initRacks() {
+  for (let i = 0; i < RACKS; i++) {
+    state.rackTemps[i] = 30 + Math.random() * 40;
+    state.rackPowers[i] = 200 + Math.random() * 600;
+    state.rackWorkloads[i] = Math.random() > 0.4 ? WL_TYPES[Math.floor(Math.random()*4)] : null;
+  }
+}
+
+// RL: Simple Q-learning reward function
+function calcReward(temp, power, pue) {
+  let reward = 0;
+  // Reward for lower temp
+  reward += (85 - temp) * 0.5;
+  // Reward for lower PUE
+  reward += (2.0 - pue) * 20;
+  // Penalty for high power
+  reward -= (power - 200) * 0.01;
+  // Bonus for staying in safe zone
+  if (temp < 70) reward += 15;
+  if (pue < 1.4) reward += 30;
+  return Math.round(reward);
+}
+
+// Thermal color from temp
+function tempColor(t) {
+  if (t < 40) return `hsl(195,100%,${30 + (t/40)*30}%)`;
+  if (t < 55) return `hsl(${130 - ((t-40)/15)*90},85%,40%)`;
+  if (t < 70) return `hsl(${40 - ((t-55)/15)*20},90%,45%)`;
+  if (t < 80) return `hsl(${20 - ((t-70)/10)*20},95%,45%)`;
+  return `hsl(0,95%,${50 - ((t-80)/5)*10}%)`;
+}
+
+// ============================================================
+// RENDER HEATMAP
+// ============================================================
+function renderHeatmap() {
+  const grid = document.getElementById('heatmap-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < RACKS; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'rack-cell';
+    cell.style.background = tempColor(state.rackTemps[i]);
+    if (state.rackTemps[i] > 78) cell.style.boxShadow = `0 0 6px rgba(255,45,45,0.6)`;
+    const wl = state.rackWorkloads[i];
+    cell.textContent = wl ? wl[0] : '';
+    cell.dataset.rack = i;
+    cell.addEventListener('mouseenter', (e) => showTooltip(e, i));
+    cell.addEventListener('mouseleave', hideTooltip);
+    grid.appendChild(cell);
+  }
+}
+
+function showTooltip(e, i) {
+  const tip = document.getElementById('tooltip');
+  tip.innerHTML = `
+    <div style="color:var(--accent);font-weight:bold;margin-bottom:4px">RACK ${String(i).padStart(2,'0')}</div>
+    <div>Temp: <span style="color:var(--accent2)">${state.rackTemps[i].toFixed(1)}°C</span></div>
+    <div>Power: <span style="color:var(--warn)">${state.rackPowers[i].toFixed(0)}W</span></div>
+    <div>Workload: <span style="color:var(--accent3)">${state.rackWorkloads[i] || 'Idle'}</span></div>
+  `;
+  tip.style.left = (e.clientX + 12) + 'px';
+  tip.style.top = (e.clientY + 12) + 'px';
+  tip.classList.add('visible');
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+let rlCtx, pueCtx;
+let rlPoints = [], puePoints = [], tempPoints = [];
+
+function initCharts() {
+  rlCtx = document.getElementById('rlChart').getContext('2d');
+  pueCtx = document.getElementById('pueChart').getContext('2d');
+}
+
+function drawRewardChart() {
+  const canvas = document.getElementById('rlChart');
+  const ctx = rlCtx;
+  const W = canvas.offsetWidth || 340;
+  const H = 160;
+  canvas.width = W;
+  canvas.height = H;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+
+  const pts = rlPoints.slice(-60);
+  if (pts.length < 2) return;
+
+  const minR = Math.min(...pts) - 10;
+  const maxR = Math.max(...pts) + 10;
+
+  const scaleX = W / (pts.length - 1);
+  const scaleY = H / (maxR - minR);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(26,48,64,0.5)';
+  ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = (g / 4) * H;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+    ctx.stroke();
+  }
+
+  // Area fill
+  const gradient = ctx.createLinearGradient(0, 0, 0, H);
+  gradient.addColorStop(0, 'rgba(57,255,20,0.2)');
+  gradient.addColorStop(1, 'rgba(57,255,20,0.0)');
+
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+  pts.forEach((r, i) => {
+    const x = i * scaleX;
+    const y = H - (r - minR) * scaleY;
+    if (i === 0) ctx.lineTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.lineTo((pts.length - 1) * scaleX, H);
+  ctx.closePath();
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = '#39ff14';
+  ctx.lineWidth = 2;
+  pts.forEach((r, i) => {
+    const x = i * scaleX;
+    const y = H - (r - minR) * scaleY;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Last point dot
+  const lx = (pts.length - 1) * scaleX;
+  const ly = H - (pts[pts.length-1] - minR) * scaleY;
+  ctx.beginPath();
+  ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#39ff14';
+  ctx.fill();
+}
+
+function drawPueChart() {
+  const canvas = document.getElementById('pueChart');
+  const ctx = pueCtx;
+  const W = canvas.offsetWidth || 340;
+  const H = 160;
+  canvas.width = W;
+  canvas.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  const pp = puePoints.slice(-60);
+  const tp = tempPoints.slice(-60);
+  if (pp.length < 2) return;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(26,48,64,0.5)';
+  ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = (g / 4) * H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  const scaleX = W / (pp.length - 1);
+
+  // PUE line (0.8–2.0 range)
+  ctx.beginPath();
+  ctx.strokeStyle = 'var(--accent3)';
+  ctx.lineWidth = 2;
+  pp.forEach((v, i) => {
+    const x = i * scaleX;
+    const y = H - ((v - 0.8) / 1.2) * H;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Temp/10 line (30–90°C → 3–9 → mapped to 0-2 range)
+  ctx.beginPath();
+  ctx.strokeStyle = 'var(--accent2)';
+  ctx.lineWidth = 2;
+  tp.forEach((v, i) => {
+    const x = i * scaleX;
+    const y = H - ((v/10 - 0.8) / 1.2) * H;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+// ============================================================
+// WORKLOAD TABLE
+// ============================================================
+const JOBS = [
+  {name:'llm-train-001', type:'ML', baseTemp:72, basePower:850},
+  {name:'pg-replica-02', type:'DB', baseTemp:48, basePower:320},
+  {name:'inference-svc', type:'INF', baseTemp:61, basePower:520},
+  {name:'video-enc-7k', type:'VID', baseTemp:66, basePower:680},
+  {name:'bert-finetune', type:'ML', baseTemp:75, basePower:920},
+  {name:'timescaledb-1', type:'DB', baseTemp:42, basePower:280},
+  {name:'triton-server', type:'INF', baseTemp:58, basePower:490},
+];
+
+let jobState = JOBS.map(j => ({
+  ...j,
+  rack: Math.floor(Math.random() * 64),
+  temp: j.baseTemp + (Math.random()-0.5)*10,
+  power: j.basePower + (Math.random()-0.5)*100,
+  active: Math.random() > 0.3,
+}));
+
+function renderWorkloadTable() {
+  const tbody = document.getElementById('wlBody');
+  tbody.innerHTML = '';
+  jobState.forEach(j => {
+    const tr = document.createElement('tr');
+    const tc = j.temp < 60 ? 'var(--accent3)' : j.temp < 75 ? 'var(--warn)' : 'var(--hot)';
+    tr.innerHTML = `
+      <td>${j.name}</td>
+      <td><span class="badge ${WL_COLORS[j.type]}">${j.type}</span></td>
+      <td>R${String(j.rack).padStart(2,'0')}</td>
+      <td><span class="temp-pill" style="background:${tc}22;color:${tc}">${j.temp.toFixed(1)}°C</span></td>
+      <td>${j.power.toFixed(0)}W</td>
+      <td style="color:${j.active?'var(--accent3)':'var(--dim)'}">● ${j.active?'Active':'Idle'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============================================================
+// EPISODE LOG
+// ============================================================
+let epCount = 0;
+function logEpisode(ep, reward, action, pue, temp) {
+  const log = document.getElementById('episodeLog');
+
+  // Clear placeholder
+  if (epCount === 0) log.innerHTML = '';
+  epCount++;
+
+  const cls = reward > 50 ? 'good' : reward > 0 ? 'ok' : 'bad';
+  const row = document.createElement('div');
+  row.className = 'ep-row';
+  row.innerHTML = `
+    <span style="color:var(--dim)">#${String(ep).padStart(3,'0')}</span>
+    <span class="ep-reward ${cls}">${reward > 0 ? '+' : ''}${reward}</span>
+    <span style="color:var(--accent3)">${pue.toFixed(3)}</span>
+    <span style="color:var(--accent2)">${temp.toFixed(1)}°C</span>
+    <span style="color:var(--dim)">${action}</span>
+  `;
+  log.prepend(row);
+
+  // Trim
+  while (log.children.length > 50) log.lastChild.remove();
+}
+
+// ============================================================
+// RL STEP
+// ============================================================
+const ACTIONS = [
+  'Migrate ML→Cool zone',
+  'Throttle hot rack power',
+  'Increase liquid flow rate',
+  'Redistribute GPU workloads',
+  'Balance DB to warm zone',
+  'Preempt low-priority jobs',
+  'Boost cooling fan speed',
+  'Shift inference load',
+  'Enable adaptive clock',
+  'Spawn new rack cluster',
+];
+
+function rlStep() {
+  state.step++;
+  state.episode++;
+
+  // RL: Choose action (epsilon-greedy simplified)
+  const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+
+  // Update rack temps (simulate cooling effect over time + noise)
+  const cooling = state.coolingBudget / 100;
+  const intensity = state.intensity / 10;
+
+  for (let i = 0; i < RACKS; i++) {
+    // Natural drift up from workload
+    state.rackTemps[i] += (Math.random() - 0.3) * intensity * 3;
+    // Cooling brings it down
+    state.rackTemps[i] -= cooling * 2 + Math.random() * 1.5;
+    // Clamp
+    state.rackTemps[i] = Math.max(28, Math.min(90, state.rackTemps[i]));
+    // Power fluctuation
+    state.rackPowers[i] += (Math.random() - 0.5) * 40 * intensity;
+    state.rackPowers[i] = Math.max(100, Math.min(1200, state.rackPowers[i]));
+  }
+
+  // Compute aggregate metrics
+  const avgTemp = state.rackTemps.reduce((a,b)=>a+b,0) / RACKS;
+  const totalPower = state.rackPowers.reduce((a,b)=>a+b,0);
+
+  // PUE: starts at 1.61, asymptotically approaches 1.2 as episodes grow
+  const progress = Math.min(state.episode / 200, 1);
+  const noisePUE = (Math.random()-0.5)*0.04;
+  state.pue = 1.61 - progress * 0.41 * cooling + noisePUE;
+  state.pue = Math.max(1.18, Math.min(1.8, state.pue));
+
+  // GPU density: 1x → 4x over episodes
+  state.gpuDensity = 1 + progress * 3 * cooling;
+  state.gpuDensity = Math.min(4, state.gpuDensity);
+
+  // Deals unlocked: nonlinear ramp up to $50M+
+  state.deals = progress * progress * 55 * cooling;
+
+  // Digital twin accuracy: 75% → 90%
+  state.accuracy = 75 + progress * 15;
+  state.totalSamples = state.episode * 64;
+  state.modelIter = state.episode * 3;
+
+  state.avgTemp = avgTemp;
+
+  // Reward
+  const reward = calcReward(avgTemp, totalPower / RACKS, state.pue);
+
+  // Store history
+  rlPoints.push(reward);
+  puePoints.push(state.pue);
+  tempPoints.push(avgTemp);
+
+  if (rlPoints.length > 200) { rlPoints.shift(); puePoints.shift(); tempPoints.shift(); }
+
+  // Update jobs
+  jobState.forEach(j => {
+    j.temp += (Math.random()-0.4) * intensity * 2 - cooling;
+    j.temp = Math.max(30, Math.min(85, j.temp));
+    j.power += (Math.random()-0.5) * 50;
+    j.power = Math.max(150, Math.min(1100, j.power));
+    j.rack = Math.floor(Math.random() * 64);
+    j.active = Math.random() > 0.15;
+  });
+
+  // Log episode
+  logEpisode(state.episode, reward, action, state.pue, avgTemp);
+
+  // Update UI
+  updateKPIs(avgTemp, reward);
+  updatePrometheus(avgTemp, totalPower);
+  renderHeatmap();
+  renderWorkloadTable();
+  drawRewardChart();
+  drawPueChart();
+  updateDigitalTwin();
+}
+
+function updateKPIs(avgTemp, reward) {
+  // PUE
+  document.getElementById('pue').textContent = state.pue.toFixed(3);
+  const pueDelta = ((1.61 - state.pue) / 1.61 * 100).toFixed(1);
+  document.getElementById('pue-delta').textContent = `▼ ${pueDelta}% improved`;
+  document.getElementById('pue-delta').className = 'kpi-delta good';
+
+  // GPU Density
+  document.getElementById('gpuDensity').textContent = state.gpuDensity.toFixed(2) + 'x';
+  document.getElementById('gpu-delta').textContent = `▲ +${((state.gpuDensity-1)*100).toFixed(0)}% increase`;
+
+  // Temp
+  document.getElementById('avgTemp').textContent = avgTemp.toFixed(1) + '°C';
+  const tempEl = document.getElementById('avgTemp');
+  tempEl.style.color = avgTemp > 78 ? 'var(--hot)' : avgTemp > 65 ? 'var(--accent2)' : 'var(--accent3)';
+  document.getElementById('temp-delta').textContent = avgTemp > 78 ? '▲ HIGH RISK' : avgTemp > 65 ? '— Elevated' : '▼ Safe';
+  document.getElementById('temp-delta').className = 'kpi-delta ' + (avgTemp > 78 ? 'bad' : avgTemp > 65 ? '' : 'good');
+
+  // Deals
+  document.getElementById('deals').textContent = `$${state.deals.toFixed(1)}M`;
+  document.getElementById('deals-delta').textContent = state.deals > 0 ? `▲ Unlocking power cap` : 'Awaiting optimization';
+
+  // Episodes
+  document.getElementById('episodes').textContent = state.episode;
+  document.getElementById('ep-delta').textContent = `Latest reward: ${reward > 0 ? '+' : ''}${reward}`;
+
+  const bestR = rlPoints.length ? Math.max(...rlPoints) : 0;
+  document.getElementById('bestReward').textContent = `Best: +${bestR}`;
+}
+
+function updatePrometheus(avgTemp, totalPower) {
+  const flow = (state.coolingBudget * 1.8 + Math.random()*5).toFixed(1);
+  const inlet = (avgTemp - 20 + Math.random()*3).toFixed(1);
+
+  document.getElementById('flowMetric').textContent = flow + ' L/min';
+  document.getElementById('inletMetric').textContent = inlet + '°C';
+  document.getElementById('pueMetric').textContent = state.pue.toFixed(3);
+  document.getElementById('gpuMetric').textContent = (state.gpuDensity * 22 + Math.random()*5).toFixed(1) + '%';
+
+  const flowPct = Math.min(100, (flow / 200) * 100);
+  const inletPct = Math.min(100, ((inlet - 20) / 60) * 100);
+  const puePct = Math.min(100, Math.max(0, (2.0 - state.pue) / 0.8 * 100));
+  const gpuPct = Math.min(100, state.gpuDensity * 22 + Math.random() * 5);
+
+  document.getElementById('flowBar').style.width = flowPct + '%';
+  document.getElementById('inletBar').style.width = inletPct + '%';
+  document.getElementById('pueBar').style.width = puePct + '%';
+  document.getElementById('gpuBar').style.width = gpuPct + '%';
+}
+
+function updateDigitalTwin() {
+  const acc = state.accuracy;
+  document.getElementById('accuracyPct').textContent = acc.toFixed(1) + '%';
+
+  // Arc: dashoffset for full circle (251.2px) - at 75% fill offset should be ~63
+  const offset = 251.2 * (1 - acc / 100);
+  document.getElementById('accuracyArc').setAttribute('stroke-dashoffset', offset.toFixed(1));
+
+  const spikePred = Math.min(90, 71 + (acc - 75) * 0.95);
+  document.getElementById('spikePred').textContent = spikePred.toFixed(1) + '%';
+  document.getElementById('pueError').textContent = '±' + Math.max(0.01, (0.08 - (acc-75)*0.003)).toFixed(3);
+  document.getElementById('samples').textContent = state.totalSamples.toLocaleString();
+  document.getElementById('modelIter').textContent = state.modelIter.toLocaleString();
+}
+
+// ============================================================
+// CONTROLS
+// ============================================================
+function toggleSim() {
+  state.running = !state.running;
+  const btn = document.getElementById('btnText');
+  const footer = document.getElementById('footerStatus');
+
+  if (state.running) {
+    btn.textContent = '⏸ PAUSE OPTIMIZER';
+    footer.textContent = '● RUNNING';
+    footer.style.color = 'var(--accent3)';
+    state.interval = setInterval(rlStep, 600);
+  } else {
+    btn.textContent = '▶ START OPTIMIZER';
+    footer.textContent = '● PAUSED';
+    footer.style.color = 'var(--warn)';
+    clearInterval(state.interval);
+  }
+}
+
+function runEpisode() {
+  rlStep();
+}
+
+function resetAll() {
+  clearInterval(state.interval);
+  state.running = false;
+  state.episode = 0;
+  state.step = 0;
+  state.pue = 1.61;
+  state.avgTemp = 68;
+  state.gpuDensity = 1.0;
+  state.deals = 0;
+  state.accuracy = 75;
+  state.totalSamples = 0;
+  state.modelIter = 0;
+  rlPoints = [];
+  puePoints = [];
+  tempPoints = [];
+  epCount = 0;
+  document.getElementById('btnText').textContent = '▶ START OPTIMIZER';
+  document.getElementById('footerStatus').textContent = '● IDLE';
+  document.getElementById('footerStatus').style.color = '';
+  document.getElementById('pue').textContent = '1.610';
+  document.getElementById('gpuDensity').textContent = '1.0x';
+  document.getElementById('avgTemp').textContent = '68.0°C';
+  document.getElementById('deals').textContent = '$0.0M';
+  document.getElementById('episodes').textContent = '0';
+  document.getElementById('accuracyPct').textContent = '75%';
+  document.getElementById('episodeLog').innerHTML = '<div style="color:var(--dim);font-size:0.65rem;padding:20px 0;text-align:center">Start optimizer to begin training…</div>';
+  initRacks();
+  renderHeatmap();
+  renderWorkloadTable();
+  drawRewardChart();
+  drawPueChart();
+}
+
+function updateCooling(v) {
+  state.coolingBudget = parseInt(v);
+  document.getElementById('coolingVal').textContent = v + '%';
+}
+
+function updateIntensity(v) {
+  state.intensity = parseInt(v);
+  document.getElementById('intensityVal').textContent = v;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initRacks();
+initCharts();
+renderHeatmap();
+renderWorkloadTable();
+drawRewardChart();
+drawPueChart();
+updateDigitalTwin();
+
+// Animate rack temps gently on hover
+document.addEventListener('mousemove', e => {
+  const tip = document.getElementById('tooltip');
+  if (tip.classList.contains('visible')) {
+    tip.style.left = (e.clientX + 14) + 'px';
+    tip.style.top = (e.clientY + 14) + 'px';
+  }
+});
+</script>
+</body>
+</html>

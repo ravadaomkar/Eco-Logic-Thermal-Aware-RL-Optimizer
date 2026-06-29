@@ -1,0 +1,1817 @@
+{
+  "summary": {
+    "total_episodes": 200,
+    "initial_pue": 1.61,
+    "final_pue": 1.3024,
+    "pue_improvement_pct": 19.11,
+    "initial_gpu_density": "1.0x",
+    "final_gpu_density": "3.25x",
+    "deals_unlocked_M": "$41.25M",
+    "digital_twin_accuracy_pct": 90,
+    "best_reward": 67,
+    "avg_reward": 43.92,
+    "total_reward": 8784
+  },
+  "episodes": [
+    {
+      "episode": 1,
+      "pue": 1.6221,
+      "avg_temp_c": 68.01,
+      "gpu_density_x": 1.011,
+      "deals_unlocked_M": 0.0,
+      "twin_accuracy_pct": 75.08,
+      "reward": 28
+    },
+    {
+      "episode": 2,
+      "pue": 1.6296,
+      "avg_temp_c": 68.52,
+      "gpu_density_x": 1.022,
+      "deals_unlocked_M": 0.0,
+      "twin_accuracy_pct": 75.15,
+      "reward": 27
+    },
+    {
+      "episode": 3,
+      "pue": 1.6127,
+      "avg_temp_c": 68.37,
+      "gpu_density_x": 1.034,
+      "deals_unlocked_M": 0.01,
+      "twin_accuracy_pct": 75.22,
+      "reward": 27
+    },
+    {
+      "episode": 4,
+      "pue": 1.5939,
+      "avg_temp_c": 68.14,
+      "gpu_density_x": 1.045,
+      "deals_unlocked_M": 0.02,
+      "twin_accuracy_pct": 75.3,
+      "reward": 28
+    },
+    {
+      "episode": 5,
+      "pue": 1.6102,
+      "avg_temp_c": 68.02,
+      "gpu_density_x": 1.056,
+      "deals_unlocked_M": 0.03,
+      "twin_accuracy_pct": 75.38,
+      "reward": 28
+    },
+    {
+      "episode": 6,
+      "pue": 1.6058,
+      "avg_temp_c": 67.21,
+      "gpu_density_x": 1.067,
+      "deals_unlocked_M": 0.04,
+      "twin_accuracy_pct": 75.45,
+      "reward": 28
+    },
+    {
+      "episode": 7,
+      "pue": 1.6138,
+      "avg_temp_c": 66.45,
+      "gpu_density_x": 1.079,
+      "deals_unlocked_M": 0.05,
+      "twin_accuracy_pct": 75.53,
+      "reward": 28
+    },
+    {
+      "episode": 8,
+      "pue": 1.601,
+      "avg_temp_c": 65.57,
+      "gpu_density_x": 1.09,
+      "deals_unlocked_M": 0.07,
+      "twin_accuracy_pct": 75.6,
+      "reward": 29
+    },
+    {
+      "episode": 9,
+      "pue": 1.5888,
+      "avg_temp_c": 65.24,
+      "gpu_density_x": 1.101,
+      "deals_unlocked_M": 0.08,
+      "twin_accuracy_pct": 75.67,
+      "reward": 30
+    },
+    {
+      "episode": 10,
+      "pue": 1.5831,
+      "avg_temp_c": 65.14,
+      "gpu_density_x": 1.113,
+      "deals_unlocked_M": 0.1,
+      "twin_accuracy_pct": 75.75,
+      "reward": 30
+    },
+    {
+      "episode": 11,
+      "pue": 1.5968,
+      "avg_temp_c": 65.23,
+      "gpu_density_x": 1.124,
+      "deals_unlocked_M": 0.12,
+      "twin_accuracy_pct": 75.83,
+      "reward": 30
+    },
+    {
+      "episode": 12,
+      "pue": 1.5986,
+      "avg_temp_c": 64.52,
+      "gpu_density_x": 1.135,
+      "deals_unlocked_M": 0.15,
+      "twin_accuracy_pct": 75.9,
+      "reward": 30
+    },
+    {
+      "episode": 13,
+      "pue": 1.5841,
+      "avg_temp_c": 64.58,
+      "gpu_density_x": 1.146,
+      "deals_unlocked_M": 0.17,
+      "twin_accuracy_pct": 75.97,
+      "reward": 30
+    },
+    {
+      "episode": 14,
+      "pue": 1.6009,
+      "avg_temp_c": 64.45,
+      "gpu_density_x": 1.157,
+      "deals_unlocked_M": 0.2,
+      "twin_accuracy_pct": 76.05,
+      "reward": 30
+    },
+    {
+      "episode": 15,
+      "pue": 1.6165,
+      "avg_temp_c": 64.93,
+      "gpu_density_x": 1.169,
+      "deals_unlocked_M": 0.23,
+      "twin_accuracy_pct": 76.12,
+      "reward": 30
+    },
+    {
+      "episode": 16,
+      "pue": 1.5931,
+      "avg_temp_c": 64.67,
+      "gpu_density_x": 1.18,
+      "deals_unlocked_M": 0.26,
+      "twin_accuracy_pct": 76.2,
+      "reward": 29
+    },
+    {
+      "episode": 17,
+      "pue": 1.5871,
+      "avg_temp_c": 64.81,
+      "gpu_density_x": 1.191,
+      "deals_unlocked_M": 0.3,
+      "twin_accuracy_pct": 76.28,
+      "reward": 30
+    },
+    {
+      "episode": 18,
+      "pue": 1.5787,
+      "avg_temp_c": 65.33,
+      "gpu_density_x": 1.203,
+      "deals_unlocked_M": 0.33,
+      "twin_accuracy_pct": 76.35,
+      "reward": 29
+    },
+    {
+      "episode": 19,
+      "pue": 1.585,
+      "avg_temp_c": 65.05,
+      "gpu_density_x": 1.214,
+      "deals_unlocked_M": 0.37,
+      "twin_accuracy_pct": 76.42,
+      "reward": 30
+    },
+    {
+      "episode": 20,
+      "pue": 1.5765,
+      "avg_temp_c": 65.11,
+      "gpu_density_x": 1.225,
+      "deals_unlocked_M": 0.41,
+      "twin_accuracy_pct": 76.5,
+      "reward": 30
+    },
+    {
+      "episode": 21,
+      "pue": 1.568,
+      "avg_temp_c": 64.74,
+      "gpu_density_x": 1.236,
+      "deals_unlocked_M": 0.45,
+      "twin_accuracy_pct": 76.58,
+      "reward": 30
+    },
+    {
+      "episode": 22,
+      "pue": 1.5755,
+      "avg_temp_c": 64.93,
+      "gpu_density_x": 1.248,
+      "deals_unlocked_M": 0.5,
+      "twin_accuracy_pct": 76.65,
+      "reward": 30
+    },
+    {
+      "episode": 23,
+      "pue": 1.5771,
+      "avg_temp_c": 65.53,
+      "gpu_density_x": 1.259,
+      "deals_unlocked_M": 0.55,
+      "twin_accuracy_pct": 76.72,
+      "reward": 29
+    },
+    {
+      "episode": 24,
+      "pue": 1.5812,
+      "avg_temp_c": 65.7,
+      "gpu_density_x": 1.27,
+      "deals_unlocked_M": 0.59,
+      "twin_accuracy_pct": 76.8,
+      "reward": 30
+    },
+    {
+      "episode": 25,
+      "pue": 1.5679,
+      "avg_temp_c": 65.33,
+      "gpu_density_x": 1.281,
+      "deals_unlocked_M": 0.64,
+      "twin_accuracy_pct": 76.88,
+      "reward": 30
+    },
+    {
+      "episode": 26,
+      "pue": 1.5737,
+      "avg_temp_c": 65.23,
+      "gpu_density_x": 1.292,
+      "deals_unlocked_M": 0.7,
+      "twin_accuracy_pct": 76.95,
+      "reward": 30
+    },
+    {
+      "episode": 27,
+      "pue": 1.5807,
+      "avg_temp_c": 65.38,
+      "gpu_density_x": 1.304,
+      "deals_unlocked_M": 0.75,
+      "twin_accuracy_pct": 77.03,
+      "reward": 30
+    },
+    {
+      "episode": 28,
+      "pue": 1.5792,
+      "avg_temp_c": 65.01,
+      "gpu_density_x": 1.315,
+      "deals_unlocked_M": 0.81,
+      "twin_accuracy_pct": 77.1,
+      "reward": 29
+    },
+    {
+      "episode": 29,
+      "pue": 1.5791,
+      "avg_temp_c": 64.72,
+      "gpu_density_x": 1.326,
+      "deals_unlocked_M": 0.87,
+      "twin_accuracy_pct": 77.17,
+      "reward": 30
+    },
+    {
+      "episode": 30,
+      "pue": 1.5611,
+      "avg_temp_c": 64.03,
+      "gpu_density_x": 1.337,
+      "deals_unlocked_M": 0.93,
+      "twin_accuracy_pct": 77.25,
+      "reward": 31
+    },
+    {
+      "episode": 31,
+      "pue": 1.5648,
+      "avg_temp_c": 63.65,
+      "gpu_density_x": 1.349,
+      "deals_unlocked_M": 0.99,
+      "twin_accuracy_pct": 77.33,
+      "reward": 31
+    },
+    {
+      "episode": 32,
+      "pue": 1.5667,
+      "avg_temp_c": 63.52,
+      "gpu_density_x": 1.36,
+      "deals_unlocked_M": 1.06,
+      "twin_accuracy_pct": 77.4,
+      "reward": 31
+    },
+    {
+      "episode": 33,
+      "pue": 1.551,
+      "avg_temp_c": 63.5,
+      "gpu_density_x": 1.371,
+      "deals_unlocked_M": 1.12,
+      "twin_accuracy_pct": 77.47,
+      "reward": 31
+    },
+    {
+      "episode": 34,
+      "pue": 1.5714,
+      "avg_temp_c": 63.39,
+      "gpu_density_x": 1.383,
+      "deals_unlocked_M": 1.19,
+      "twin_accuracy_pct": 77.55,
+      "reward": 31
+    },
+    {
+      "episode": 35,
+      "pue": 1.5531,
+      "avg_temp_c": 63.38,
+      "gpu_density_x": 1.394,
+      "deals_unlocked_M": 1.26,
+      "twin_accuracy_pct": 77.62,
+      "reward": 31
+    },
+    {
+      "episode": 36,
+      "pue": 1.5632,
+      "avg_temp_c": 63.35,
+      "gpu_density_x": 1.405,
+      "deals_unlocked_M": 1.34,
+      "twin_accuracy_pct": 77.7,
+      "reward": 31
+    },
+    {
+      "episode": 37,
+      "pue": 1.5507,
+      "avg_temp_c": 63.19,
+      "gpu_density_x": 1.416,
+      "deals_unlocked_M": 1.41,
+      "twin_accuracy_pct": 77.78,
+      "reward": 32
+    },
+    {
+      "episode": 38,
+      "pue": 1.555,
+      "avg_temp_c": 63.36,
+      "gpu_density_x": 1.427,
+      "deals_unlocked_M": 1.49,
+      "twin_accuracy_pct": 77.85,
+      "reward": 31
+    },
+    {
+      "episode": 39,
+      "pue": 1.5478,
+      "avg_temp_c": 62.67,
+      "gpu_density_x": 1.439,
+      "deals_unlocked_M": 1.57,
+      "twin_accuracy_pct": 77.92,
+      "reward": 32
+    },
+    {
+      "episode": 40,
+      "pue": 1.5273,
+      "avg_temp_c": 62.21,
+      "gpu_density_x": 1.45,
+      "deals_unlocked_M": 1.65,
+      "twin_accuracy_pct": 78.0,
+      "reward": 33
+    },
+    {
+      "episode": 41,
+      "pue": 1.5521,
+      "avg_temp_c": 61.73,
+      "gpu_density_x": 1.461,
+      "deals_unlocked_M": 1.73,
+      "twin_accuracy_pct": 78.08,
+      "reward": 32
+    },
+    {
+      "episode": 42,
+      "pue": 1.5514,
+      "avg_temp_c": 61.96,
+      "gpu_density_x": 1.473,
+      "deals_unlocked_M": 1.82,
+      "twin_accuracy_pct": 78.15,
+      "reward": 32
+    },
+    {
+      "episode": 43,
+      "pue": 1.5491,
+      "avg_temp_c": 62.15,
+      "gpu_density_x": 1.484,
+      "deals_unlocked_M": 1.91,
+      "twin_accuracy_pct": 78.22,
+      "reward": 32
+    },
+    {
+      "episode": 44,
+      "pue": 1.536,
+      "avg_temp_c": 61.81,
+      "gpu_density_x": 1.495,
+      "deals_unlocked_M": 2.0,
+      "twin_accuracy_pct": 78.3,
+      "reward": 32
+    },
+    {
+      "episode": 45,
+      "pue": 1.5601,
+      "avg_temp_c": 61.86,
+      "gpu_density_x": 1.506,
+      "deals_unlocked_M": 2.09,
+      "twin_accuracy_pct": 78.38,
+      "reward": 32
+    },
+    {
+      "episode": 46,
+      "pue": 1.5473,
+      "avg_temp_c": 62.29,
+      "gpu_density_x": 1.518,
+      "deals_unlocked_M": 2.18,
+      "twin_accuracy_pct": 78.45,
+      "reward": 32
+    },
+    {
+      "episode": 47,
+      "pue": 1.5386,
+      "avg_temp_c": 62.13,
+      "gpu_density_x": 1.529,
+      "deals_unlocked_M": 2.28,
+      "twin_accuracy_pct": 78.53,
+      "reward": 32
+    },
+    {
+      "episode": 48,
+      "pue": 1.5311,
+      "avg_temp_c": 62.8,
+      "gpu_density_x": 1.54,
+      "deals_unlocked_M": 2.38,
+      "twin_accuracy_pct": 78.6,
+      "reward": 32
+    },
+    {
+      "episode": 49,
+      "pue": 1.5309,
+      "avg_temp_c": 62.15,
+      "gpu_density_x": 1.551,
+      "deals_unlocked_M": 2.48,
+      "twin_accuracy_pct": 78.67,
+      "reward": 32
+    },
+    {
+      "episode": 50,
+      "pue": 1.5357,
+      "avg_temp_c": 62.55,
+      "gpu_density_x": 1.562,
+      "deals_unlocked_M": 2.58,
+      "twin_accuracy_pct": 78.75,
+      "reward": 31
+    },
+    {
+      "episode": 51,
+      "pue": 1.5384,
+      "avg_temp_c": 62.71,
+      "gpu_density_x": 1.574,
+      "deals_unlocked_M": 2.68,
+      "twin_accuracy_pct": 78.83,
+      "reward": 32
+    },
+    {
+      "episode": 52,
+      "pue": 1.5271,
+      "avg_temp_c": 62.6,
+      "gpu_density_x": 1.585,
+      "deals_unlocked_M": 2.79,
+      "twin_accuracy_pct": 78.9,
+      "reward": 32
+    },
+    {
+      "episode": 53,
+      "pue": 1.501,
+      "avg_temp_c": 62.28,
+      "gpu_density_x": 1.596,
+      "deals_unlocked_M": 2.9,
+      "twin_accuracy_pct": 78.97,
+      "reward": 33
+    },
+    {
+      "episode": 54,
+      "pue": 1.522,
+      "avg_temp_c": 62.53,
+      "gpu_density_x": 1.607,
+      "deals_unlocked_M": 3.01,
+      "twin_accuracy_pct": 79.05,
+      "reward": 32
+    },
+    {
+      "episode": 55,
+      "pue": 1.5158,
+      "avg_temp_c": 62.57,
+      "gpu_density_x": 1.619,
+      "deals_unlocked_M": 3.12,
+      "twin_accuracy_pct": 79.12,
+      "reward": 32
+    },
+    {
+      "episode": 56,
+      "pue": 1.5366,
+      "avg_temp_c": 62.9,
+      "gpu_density_x": 1.63,
+      "deals_unlocked_M": 3.23,
+      "twin_accuracy_pct": 79.2,
+      "reward": 32
+    },
+    {
+      "episode": 57,
+      "pue": 1.5238,
+      "avg_temp_c": 62.25,
+      "gpu_density_x": 1.641,
+      "deals_unlocked_M": 3.35,
+      "twin_accuracy_pct": 79.28,
+      "reward": 33
+    },
+    {
+      "episode": 58,
+      "pue": 1.5227,
+      "avg_temp_c": 62.63,
+      "gpu_density_x": 1.652,
+      "deals_unlocked_M": 3.47,
+      "twin_accuracy_pct": 79.35,
+      "reward": 32
+    },
+    {
+      "episode": 59,
+      "pue": 1.526,
+      "avg_temp_c": 61.98,
+      "gpu_density_x": 1.664,
+      "deals_unlocked_M": 3.59,
+      "twin_accuracy_pct": 79.42,
+      "reward": 32
+    },
+    {
+      "episode": 60,
+      "pue": 1.5245,
+      "avg_temp_c": 62.13,
+      "gpu_density_x": 1.675,
+      "deals_unlocked_M": 3.71,
+      "twin_accuracy_pct": 79.5,
+      "reward": 33
+    },
+    {
+      "episode": 61,
+      "pue": 1.5166,
+      "avg_temp_c": 61.98,
+      "gpu_density_x": 1.686,
+      "deals_unlocked_M": 3.84,
+      "twin_accuracy_pct": 79.58,
+      "reward": 33
+    },
+    {
+      "episode": 62,
+      "pue": 1.5004,
+      "avg_temp_c": 61.37,
+      "gpu_density_x": 1.698,
+      "deals_unlocked_M": 3.96,
+      "twin_accuracy_pct": 79.65,
+      "reward": 33
+    },
+    {
+      "episode": 63,
+      "pue": 1.5244,
+      "avg_temp_c": 61.69,
+      "gpu_density_x": 1.709,
+      "deals_unlocked_M": 4.09,
+      "twin_accuracy_pct": 79.72,
+      "reward": 32
+    },
+    {
+      "episode": 64,
+      "pue": 1.4866,
+      "avg_temp_c": 61.36,
+      "gpu_density_x": 1.72,
+      "deals_unlocked_M": 4.22,
+      "twin_accuracy_pct": 79.8,
+      "reward": 33
+    },
+    {
+      "episode": 65,
+      "pue": 1.4971,
+      "avg_temp_c": 61.52,
+      "gpu_density_x": 1.731,
+      "deals_unlocked_M": 4.36,
+      "twin_accuracy_pct": 79.88,
+      "reward": 34
+    },
+    {
+      "episode": 66,
+      "pue": 1.4933,
+      "avg_temp_c": 61.7,
+      "gpu_density_x": 1.742,
+      "deals_unlocked_M": 4.49,
+      "twin_accuracy_pct": 79.95,
+      "reward": 33
+    },
+    {
+      "episode": 67,
+      "pue": 1.5133,
+      "avg_temp_c": 61.75,
+      "gpu_density_x": 1.754,
+      "deals_unlocked_M": 4.63,
+      "twin_accuracy_pct": 80.03,
+      "reward": 33
+    },
+    {
+      "episode": 68,
+      "pue": 1.5085,
+      "avg_temp_c": 61.57,
+      "gpu_density_x": 1.765,
+      "deals_unlocked_M": 4.77,
+      "twin_accuracy_pct": 80.1,
+      "reward": 33
+    },
+    {
+      "episode": 69,
+      "pue": 1.5294,
+      "avg_temp_c": 62.05,
+      "gpu_density_x": 1.776,
+      "deals_unlocked_M": 4.91,
+      "twin_accuracy_pct": 80.17,
+      "reward": 32
+    },
+    {
+      "episode": 70,
+      "pue": 1.5004,
+      "avg_temp_c": 61.69,
+      "gpu_density_x": 1.787,
+      "deals_unlocked_M": 5.05,
+      "twin_accuracy_pct": 80.25,
+      "reward": 33
+    },
+    {
+      "episode": 71,
+      "pue": 1.4954,
+      "avg_temp_c": 61.81,
+      "gpu_density_x": 1.799,
+      "deals_unlocked_M": 5.2,
+      "twin_accuracy_pct": 80.33,
+      "reward": 33
+    },
+    {
+      "episode": 72,
+      "pue": 1.501,
+      "avg_temp_c": 62.07,
+      "gpu_density_x": 1.81,
+      "deals_unlocked_M": 5.35,
+      "twin_accuracy_pct": 80.4,
+      "reward": 33
+    },
+    {
+      "episode": 73,
+      "pue": 1.4886,
+      "avg_temp_c": 62.18,
+      "gpu_density_x": 1.821,
+      "deals_unlocked_M": 5.5,
+      "twin_accuracy_pct": 80.47,
+      "reward": 33
+    },
+    {
+      "episode": 74,
+      "pue": 1.4907,
+      "avg_temp_c": 61.93,
+      "gpu_density_x": 1.833,
+      "deals_unlocked_M": 5.65,
+      "twin_accuracy_pct": 80.55,
+      "reward": 33
+    },
+    {
+      "episode": 75,
+      "pue": 1.5065,
+      "avg_temp_c": 62.2,
+      "gpu_density_x": 1.844,
+      "deals_unlocked_M": 5.8,
+      "twin_accuracy_pct": 80.62,
+      "reward": 33
+    },
+    {
+      "episode": 76,
+      "pue": 1.5049,
+      "avg_temp_c": 62.21,
+      "gpu_density_x": 1.855,
+      "deals_unlocked_M": 5.96,
+      "twin_accuracy_pct": 80.7,
+      "reward": 33
+    },
+    {
+      "episode": 77,
+      "pue": 1.494,
+      "avg_temp_c": 61.78,
+      "gpu_density_x": 1.866,
+      "deals_unlocked_M": 6.11,
+      "twin_accuracy_pct": 80.78,
+      "reward": 33
+    },
+    {
+      "episode": 78,
+      "pue": 1.4725,
+      "avg_temp_c": 61.79,
+      "gpu_density_x": 1.877,
+      "deals_unlocked_M": 6.27,
+      "twin_accuracy_pct": 80.85,
+      "reward": 34
+    },
+    {
+      "episode": 79,
+      "pue": 1.4932,
+      "avg_temp_c": 62.49,
+      "gpu_density_x": 1.889,
+      "deals_unlocked_M": 6.44,
+      "twin_accuracy_pct": 80.92,
+      "reward": 33
+    },
+    {
+      "episode": 80,
+      "pue": 1.477,
+      "avg_temp_c": 62.36,
+      "gpu_density_x": 1.9,
+      "deals_unlocked_M": 6.6,
+      "twin_accuracy_pct": 81.0,
+      "reward": 33
+    },
+    {
+      "episode": 81,
+      "pue": 1.4791,
+      "avg_temp_c": 62.1,
+      "gpu_density_x": 1.911,
+      "deals_unlocked_M": 6.77,
+      "twin_accuracy_pct": 81.08,
+      "reward": 33
+    },
+    {
+      "episode": 82,
+      "pue": 1.4827,
+      "avg_temp_c": 61.62,
+      "gpu_density_x": 1.922,
+      "deals_unlocked_M": 6.93,
+      "twin_accuracy_pct": 81.15,
+      "reward": 34
+    },
+    {
+      "episode": 83,
+      "pue": 1.4863,
+      "avg_temp_c": 61.39,
+      "gpu_density_x": 1.934,
+      "deals_unlocked_M": 7.1,
+      "twin_accuracy_pct": 81.22,
+      "reward": 34
+    },
+    {
+      "episode": 84,
+      "pue": 1.4812,
+      "avg_temp_c": 60.86,
+      "gpu_density_x": 1.945,
+      "deals_unlocked_M": 7.28,
+      "twin_accuracy_pct": 81.3,
+      "reward": 34
+    },
+    {
+      "episode": 85,
+      "pue": 1.4856,
+      "avg_temp_c": 60.96,
+      "gpu_density_x": 1.956,
+      "deals_unlocked_M": 7.45,
+      "twin_accuracy_pct": 81.38,
+      "reward": 34
+    },
+    {
+      "episode": 86,
+      "pue": 1.4641,
+      "avg_temp_c": 60.59,
+      "gpu_density_x": 1.968,
+      "deals_unlocked_M": 7.63,
+      "twin_accuracy_pct": 81.45,
+      "reward": 35
+    },
+    {
+      "episode": 87,
+      "pue": 1.4818,
+      "avg_temp_c": 60.31,
+      "gpu_density_x": 1.979,
+      "deals_unlocked_M": 7.81,
+      "twin_accuracy_pct": 81.53,
+      "reward": 34
+    },
+    {
+      "episode": 88,
+      "pue": 1.4905,
+      "avg_temp_c": 60.0,
+      "gpu_density_x": 1.99,
+      "deals_unlocked_M": 7.99,
+      "twin_accuracy_pct": 81.6,
+      "reward": 35
+    },
+    {
+      "episode": 89,
+      "pue": 1.4799,
+      "avg_temp_c": 60.13,
+      "gpu_density_x": 2.001,
+      "deals_unlocked_M": 8.17,
+      "twin_accuracy_pct": 81.67,
+      "reward": 34
+    },
+    {
+      "episode": 90,
+      "pue": 1.4749,
+      "avg_temp_c": 60.37,
+      "gpu_density_x": 2.013,
+      "deals_unlocked_M": 8.35,
+      "twin_accuracy_pct": 81.75,
+      "reward": 34
+    },
+    {
+      "episode": 91,
+      "pue": 1.4736,
+      "avg_temp_c": 59.87,
+      "gpu_density_x": 2.024,
+      "deals_unlocked_M": 8.54,
+      "twin_accuracy_pct": 81.83,
+      "reward": 35
+    },
+    {
+      "episode": 92,
+      "pue": 1.4755,
+      "avg_temp_c": 60.22,
+      "gpu_density_x": 2.035,
+      "deals_unlocked_M": 8.73,
+      "twin_accuracy_pct": 81.9,
+      "reward": 35
+    },
+    {
+      "episode": 93,
+      "pue": 1.4796,
+      "avg_temp_c": 60.4,
+      "gpu_density_x": 2.046,
+      "deals_unlocked_M": 8.92,
+      "twin_accuracy_pct": 81.97,
+      "reward": 34
+    },
+    {
+      "episode": 94,
+      "pue": 1.4553,
+      "avg_temp_c": 60.53,
+      "gpu_density_x": 2.058,
+      "deals_unlocked_M": 9.11,
+      "twin_accuracy_pct": 82.05,
+      "reward": 34
+    },
+    {
+      "episode": 95,
+      "pue": 1.476,
+      "avg_temp_c": 59.81,
+      "gpu_density_x": 2.069,
+      "deals_unlocked_M": 9.31,
+      "twin_accuracy_pct": 82.12,
+      "reward": 35
+    },
+    {
+      "episode": 96,
+      "pue": 1.4749,
+      "avg_temp_c": 60.07,
+      "gpu_density_x": 2.08,
+      "deals_unlocked_M": 9.5,
+      "twin_accuracy_pct": 82.2,
+      "reward": 34
+    },
+    {
+      "episode": 97,
+      "pue": 1.4562,
+      "avg_temp_c": 60.93,
+      "gpu_density_x": 2.091,
+      "deals_unlocked_M": 9.7,
+      "twin_accuracy_pct": 82.28,
+      "reward": 34
+    },
+    {
+      "episode": 98,
+      "pue": 1.4759,
+      "avg_temp_c": 61.33,
+      "gpu_density_x": 2.103,
+      "deals_unlocked_M": 9.9,
+      "twin_accuracy_pct": 82.35,
+      "reward": 33
+    },
+    {
+      "episode": 99,
+      "pue": 1.4515,
+      "avg_temp_c": 61.25,
+      "gpu_density_x": 2.114,
+      "deals_unlocked_M": 10.11,
+      "twin_accuracy_pct": 82.42,
+      "reward": 35
+    },
+    {
+      "episode": 100,
+      "pue": 1.4571,
+      "avg_temp_c": 61.83,
+      "gpu_density_x": 2.125,
+      "deals_unlocked_M": 10.31,
+      "twin_accuracy_pct": 82.5,
+      "reward": 34
+    },
+    {
+      "episode": 101,
+      "pue": 1.4432,
+      "avg_temp_c": 61.78,
+      "gpu_density_x": 2.136,
+      "deals_unlocked_M": 10.52,
+      "twin_accuracy_pct": 82.58,
+      "reward": 35
+    },
+    {
+      "episode": 102,
+      "pue": 1.4508,
+      "avg_temp_c": 61.1,
+      "gpu_density_x": 2.147,
+      "deals_unlocked_M": 10.73,
+      "twin_accuracy_pct": 82.65,
+      "reward": 34
+    },
+    {
+      "episode": 103,
+      "pue": 1.4405,
+      "avg_temp_c": 60.28,
+      "gpu_density_x": 2.159,
+      "deals_unlocked_M": 10.94,
+      "twin_accuracy_pct": 82.72,
+      "reward": 35
+    },
+    {
+      "episode": 104,
+      "pue": 1.4613,
+      "avg_temp_c": 59.83,
+      "gpu_density_x": 2.17,
+      "deals_unlocked_M": 11.15,
+      "twin_accuracy_pct": 82.8,
+      "reward": 35
+    },
+    {
+      "episode": 105,
+      "pue": 1.452,
+      "avg_temp_c": 59.43,
+      "gpu_density_x": 2.181,
+      "deals_unlocked_M": 11.37,
+      "twin_accuracy_pct": 82.88,
+      "reward": 35
+    },
+    {
+      "episode": 106,
+      "pue": 1.4529,
+      "avg_temp_c": 59.44,
+      "gpu_density_x": 2.192,
+      "deals_unlocked_M": 11.59,
+      "twin_accuracy_pct": 82.95,
+      "reward": 35
+    },
+    {
+      "episode": 107,
+      "pue": 1.4499,
+      "avg_temp_c": 59.16,
+      "gpu_density_x": 2.204,
+      "deals_unlocked_M": 11.81,
+      "twin_accuracy_pct": 83.03,
+      "reward": 36
+    },
+    {
+      "episode": 108,
+      "pue": 1.4537,
+      "avg_temp_c": 59.2,
+      "gpu_density_x": 2.215,
+      "deals_unlocked_M": 12.03,
+      "twin_accuracy_pct": 83.1,
+      "reward": 35
+    },
+    {
+      "episode": 109,
+      "pue": 1.4663,
+      "avg_temp_c": 59.38,
+      "gpu_density_x": 2.226,
+      "deals_unlocked_M": 12.25,
+      "twin_accuracy_pct": 83.17,
+      "reward": 35
+    },
+    {
+      "episode": 110,
+      "pue": 1.4512,
+      "avg_temp_c": 60.02,
+      "gpu_density_x": 2.237,
+      "deals_unlocked_M": 12.48,
+      "twin_accuracy_pct": 83.25,
+      "reward": 35
+    },
+    {
+      "episode": 111,
+      "pue": 1.4401,
+      "avg_temp_c": 60.47,
+      "gpu_density_x": 2.249,
+      "deals_unlocked_M": 12.71,
+      "twin_accuracy_pct": 83.33,
+      "reward": 35
+    },
+    {
+      "episode": 112,
+      "pue": 1.4399,
+      "avg_temp_c": 60.42,
+      "gpu_density_x": 2.26,
+      "deals_unlocked_M": 12.94,
+      "twin_accuracy_pct": 83.4,
+      "reward": 35
+    },
+    {
+      "episode": 113,
+      "pue": 1.4391,
+      "avg_temp_c": 60.5,
+      "gpu_density_x": 2.271,
+      "deals_unlocked_M": 13.17,
+      "twin_accuracy_pct": 83.47,
+      "reward": 35
+    },
+    {
+      "episode": 114,
+      "pue": 1.4439,
+      "avg_temp_c": 60.41,
+      "gpu_density_x": 2.282,
+      "deals_unlocked_M": 13.4,
+      "twin_accuracy_pct": 83.55,
+      "reward": 35
+    },
+    {
+      "episode": 115,
+      "pue": 1.4413,
+      "avg_temp_c": 60.05,
+      "gpu_density_x": 2.294,
+      "deals_unlocked_M": 13.64,
+      "twin_accuracy_pct": 83.62,
+      "reward": 35
+    },
+    {
+      "episode": 116,
+      "pue": 1.4462,
+      "avg_temp_c": 60.17,
+      "gpu_density_x": 2.305,
+      "deals_unlocked_M": 13.88,
+      "twin_accuracy_pct": 83.7,
+      "reward": 34
+    },
+    {
+      "episode": 117,
+      "pue": 1.4207,
+      "avg_temp_c": 59.75,
+      "gpu_density_x": 2.316,
+      "deals_unlocked_M": 14.12,
+      "twin_accuracy_pct": 83.78,
+      "reward": 36
+    },
+    {
+      "episode": 118,
+      "pue": 1.4271,
+      "avg_temp_c": 60.2,
+      "gpu_density_x": 2.328,
+      "deals_unlocked_M": 14.36,
+      "twin_accuracy_pct": 83.85,
+      "reward": 35
+    },
+    {
+      "episode": 119,
+      "pue": 1.4345,
+      "avg_temp_c": 60.25,
+      "gpu_density_x": 2.339,
+      "deals_unlocked_M": 14.6,
+      "twin_accuracy_pct": 83.92,
+      "reward": 35
+    },
+    {
+      "episode": 120,
+      "pue": 1.4358,
+      "avg_temp_c": 60.64,
+      "gpu_density_x": 2.35,
+      "deals_unlocked_M": 14.85,
+      "twin_accuracy_pct": 84.0,
+      "reward": 35
+    },
+    {
+      "episode": 121,
+      "pue": 1.4179,
+      "avg_temp_c": 60.5,
+      "gpu_density_x": 2.361,
+      "deals_unlocked_M": 15.1,
+      "twin_accuracy_pct": 84.08,
+      "reward": 36
+    },
+    {
+      "episode": 122,
+      "pue": 1.425,
+      "avg_temp_c": 60.17,
+      "gpu_density_x": 2.373,
+      "deals_unlocked_M": 15.35,
+      "twin_accuracy_pct": 84.15,
+      "reward": 35
+    },
+    {
+      "episode": 123,
+      "pue": 1.4283,
+      "avg_temp_c": 59.97,
+      "gpu_density_x": 2.384,
+      "deals_unlocked_M": 15.6,
+      "twin_accuracy_pct": 84.22,
+      "reward": 36
+    },
+    {
+      "episode": 124,
+      "pue": 1.4305,
+      "avg_temp_c": 60.3,
+      "gpu_density_x": 2.395,
+      "deals_unlocked_M": 15.86,
+      "twin_accuracy_pct": 84.3,
+      "reward": 36
+    },
+    {
+      "episode": 125,
+      "pue": 1.4093,
+      "avg_temp_c": 60.24,
+      "gpu_density_x": 2.406,
+      "deals_unlocked_M": 16.11,
+      "twin_accuracy_pct": 84.38,
+      "reward": 35
+    },
+    {
+      "episode": 126,
+      "pue": 1.4285,
+      "avg_temp_c": 60.36,
+      "gpu_density_x": 2.417,
+      "deals_unlocked_M": 16.37,
+      "twin_accuracy_pct": 84.45,
+      "reward": 35
+    },
+    {
+      "episode": 127,
+      "pue": 1.4108,
+      "avg_temp_c": 59.73,
+      "gpu_density_x": 2.429,
+      "deals_unlocked_M": 16.63,
+      "twin_accuracy_pct": 84.53,
+      "reward": 36
+    },
+    {
+      "episode": 128,
+      "pue": 1.4014,
+      "avg_temp_c": 59.6,
+      "gpu_density_x": 2.44,
+      "deals_unlocked_M": 16.9,
+      "twin_accuracy_pct": 84.6,
+      "reward": 36
+    },
+    {
+      "episode": 129,
+      "pue": 1.4044,
+      "avg_temp_c": 59.88,
+      "gpu_density_x": 2.451,
+      "deals_unlocked_M": 17.16,
+      "twin_accuracy_pct": 84.67,
+      "reward": 36
+    },
+    {
+      "episode": 130,
+      "pue": 1.4074,
+      "avg_temp_c": 59.63,
+      "gpu_density_x": 2.463,
+      "deals_unlocked_M": 17.43,
+      "twin_accuracy_pct": 84.75,
+      "reward": 36
+    },
+    {
+      "episode": 131,
+      "pue": 1.3973,
+      "avg_temp_c": 59.89,
+      "gpu_density_x": 2.474,
+      "deals_unlocked_M": 17.7,
+      "twin_accuracy_pct": 84.83,
+      "reward": 66
+    },
+    {
+      "episode": 132,
+      "pue": 1.4017,
+      "avg_temp_c": 60.15,
+      "gpu_density_x": 2.485,
+      "deals_unlocked_M": 17.97,
+      "twin_accuracy_pct": 84.9,
+      "reward": 36
+    },
+    {
+      "episode": 133,
+      "pue": 1.3947,
+      "avg_temp_c": 59.96,
+      "gpu_density_x": 2.496,
+      "deals_unlocked_M": 18.24,
+      "twin_accuracy_pct": 84.97,
+      "reward": 66
+    },
+    {
+      "episode": 134,
+      "pue": 1.398,
+      "avg_temp_c": 60.0,
+      "gpu_density_x": 2.508,
+      "deals_unlocked_M": 18.52,
+      "twin_accuracy_pct": 85.05,
+      "reward": 67
+    },
+    {
+      "episode": 135,
+      "pue": 1.3843,
+      "avg_temp_c": 60.3,
+      "gpu_density_x": 2.519,
+      "deals_unlocked_M": 18.79,
+      "twin_accuracy_pct": 85.12,
+      "reward": 66
+    },
+    {
+      "episode": 136,
+      "pue": 1.3976,
+      "avg_temp_c": 60.1,
+      "gpu_density_x": 2.53,
+      "deals_unlocked_M": 19.07,
+      "twin_accuracy_pct": 85.2,
+      "reward": 66
+    },
+    {
+      "episode": 137,
+      "pue": 1.3761,
+      "avg_temp_c": 60.13,
+      "gpu_density_x": 2.541,
+      "deals_unlocked_M": 19.36,
+      "twin_accuracy_pct": 85.28,
+      "reward": 66
+    },
+    {
+      "episode": 138,
+      "pue": 1.3979,
+      "avg_temp_c": 59.92,
+      "gpu_density_x": 2.552,
+      "deals_unlocked_M": 19.64,
+      "twin_accuracy_pct": 85.35,
+      "reward": 66
+    },
+    {
+      "episode": 139,
+      "pue": 1.3996,
+      "avg_temp_c": 59.71,
+      "gpu_density_x": 2.564,
+      "deals_unlocked_M": 19.92,
+      "twin_accuracy_pct": 85.42,
+      "reward": 66
+    },
+    {
+      "episode": 140,
+      "pue": 1.406,
+      "avg_temp_c": 59.82,
+      "gpu_density_x": 2.575,
+      "deals_unlocked_M": 20.21,
+      "twin_accuracy_pct": 85.5,
+      "reward": 36
+    },
+    {
+      "episode": 141,
+      "pue": 1.3746,
+      "avg_temp_c": 60.22,
+      "gpu_density_x": 2.586,
+      "deals_unlocked_M": 20.5,
+      "twin_accuracy_pct": 85.58,
+      "reward": 66
+    },
+    {
+      "episode": 142,
+      "pue": 1.3762,
+      "avg_temp_c": 60.38,
+      "gpu_density_x": 2.598,
+      "deals_unlocked_M": 20.79,
+      "twin_accuracy_pct": 85.65,
+      "reward": 66
+    },
+    {
+      "episode": 143,
+      "pue": 1.392,
+      "avg_temp_c": 60.8,
+      "gpu_density_x": 2.609,
+      "deals_unlocked_M": 21.09,
+      "twin_accuracy_pct": 85.72,
+      "reward": 65
+    },
+    {
+      "episode": 144,
+      "pue": 1.3956,
+      "avg_temp_c": 60.43,
+      "gpu_density_x": 2.62,
+      "deals_unlocked_M": 21.38,
+      "twin_accuracy_pct": 85.8,
+      "reward": 66
+    },
+    {
+      "episode": 145,
+      "pue": 1.3806,
+      "avg_temp_c": 60.37,
+      "gpu_density_x": 2.631,
+      "deals_unlocked_M": 21.68,
+      "twin_accuracy_pct": 85.88,
+      "reward": 66
+    },
+    {
+      "episode": 146,
+      "pue": 1.3745,
+      "avg_temp_c": 60.09,
+      "gpu_density_x": 2.643,
+      "deals_unlocked_M": 21.98,
+      "twin_accuracy_pct": 85.95,
+      "reward": 67
+    },
+    {
+      "episode": 147,
+      "pue": 1.3742,
+      "avg_temp_c": 59.6,
+      "gpu_density_x": 2.654,
+      "deals_unlocked_M": 22.28,
+      "twin_accuracy_pct": 86.03,
+      "reward": 66
+    },
+    {
+      "episode": 148,
+      "pue": 1.3775,
+      "avg_temp_c": 59.93,
+      "gpu_density_x": 2.665,
+      "deals_unlocked_M": 22.59,
+      "twin_accuracy_pct": 86.1,
+      "reward": 66
+    },
+    {
+      "episode": 149,
+      "pue": 1.3714,
+      "avg_temp_c": 59.7,
+      "gpu_density_x": 2.676,
+      "deals_unlocked_M": 22.89,
+      "twin_accuracy_pct": 86.17,
+      "reward": 67
+    },
+    {
+      "episode": 150,
+      "pue": 1.3734,
+      "avg_temp_c": 60.13,
+      "gpu_density_x": 2.688,
+      "deals_unlocked_M": 23.2,
+      "twin_accuracy_pct": 86.25,
+      "reward": 67
+    },
+    {
+      "episode": 151,
+      "pue": 1.3754,
+      "avg_temp_c": 60.18,
+      "gpu_density_x": 2.699,
+      "deals_unlocked_M": 23.51,
+      "twin_accuracy_pct": 86.33,
+      "reward": 66
+    },
+    {
+      "episode": 152,
+      "pue": 1.3747,
+      "avg_temp_c": 60.25,
+      "gpu_density_x": 2.71,
+      "deals_unlocked_M": 23.83,
+      "twin_accuracy_pct": 86.4,
+      "reward": 66
+    },
+    {
+      "episode": 153,
+      "pue": 1.3662,
+      "avg_temp_c": 60.14,
+      "gpu_density_x": 2.721,
+      "deals_unlocked_M": 24.14,
+      "twin_accuracy_pct": 86.47,
+      "reward": 67
+    },
+    {
+      "episode": 154,
+      "pue": 1.3791,
+      "avg_temp_c": 59.7,
+      "gpu_density_x": 2.732,
+      "deals_unlocked_M": 24.46,
+      "twin_accuracy_pct": 86.55,
+      "reward": 66
+    },
+    {
+      "episode": 155,
+      "pue": 1.3769,
+      "avg_temp_c": 59.19,
+      "gpu_density_x": 2.744,
+      "deals_unlocked_M": 24.78,
+      "twin_accuracy_pct": 86.62,
+      "reward": 67
+    },
+    {
+      "episode": 156,
+      "pue": 1.367,
+      "avg_temp_c": 59.74,
+      "gpu_density_x": 2.755,
+      "deals_unlocked_M": 25.1,
+      "twin_accuracy_pct": 86.7,
+      "reward": 67
+    },
+    {
+      "episode": 157,
+      "pue": 1.3623,
+      "avg_temp_c": 59.85,
+      "gpu_density_x": 2.766,
+      "deals_unlocked_M": 25.42,
+      "twin_accuracy_pct": 86.78,
+      "reward": 67
+    },
+    {
+      "episode": 158,
+      "pue": 1.3703,
+      "avg_temp_c": 59.59,
+      "gpu_density_x": 2.777,
+      "deals_unlocked_M": 25.74,
+      "twin_accuracy_pct": 86.85,
+      "reward": 67
+    },
+    {
+      "episode": 159,
+      "pue": 1.3493,
+      "avg_temp_c": 60.1,
+      "gpu_density_x": 2.789,
+      "deals_unlocked_M": 26.07,
+      "twin_accuracy_pct": 86.92,
+      "reward": 67
+    },
+    {
+      "episode": 160,
+      "pue": 1.363,
+      "avg_temp_c": 60.16,
+      "gpu_density_x": 2.8,
+      "deals_unlocked_M": 26.4,
+      "twin_accuracy_pct": 87.0,
+      "reward": 67
+    },
+    {
+      "episode": 161,
+      "pue": 1.3525,
+      "avg_temp_c": 60.03,
+      "gpu_density_x": 2.811,
+      "deals_unlocked_M": 26.73,
+      "twin_accuracy_pct": 87.08,
+      "reward": 67
+    },
+    {
+      "episode": 162,
+      "pue": 1.3673,
+      "avg_temp_c": 60.18,
+      "gpu_density_x": 2.823,
+      "deals_unlocked_M": 27.06,
+      "twin_accuracy_pct": 87.15,
+      "reward": 66
+    },
+    {
+      "episode": 163,
+      "pue": 1.3597,
+      "avg_temp_c": 60.96,
+      "gpu_density_x": 2.834,
+      "deals_unlocked_M": 27.4,
+      "twin_accuracy_pct": 87.22,
+      "reward": 66
+    },
+    {
+      "episode": 164,
+      "pue": 1.3564,
+      "avg_temp_c": 61.33,
+      "gpu_density_x": 2.845,
+      "deals_unlocked_M": 27.74,
+      "twin_accuracy_pct": 87.3,
+      "reward": 66
+    },
+    {
+      "episode": 165,
+      "pue": 1.3482,
+      "avg_temp_c": 61.82,
+      "gpu_density_x": 2.856,
+      "deals_unlocked_M": 28.08,
+      "twin_accuracy_pct": 87.38,
+      "reward": 66
+    },
+    {
+      "episode": 166,
+      "pue": 1.3634,
+      "avg_temp_c": 62.21,
+      "gpu_density_x": 2.867,
+      "deals_unlocked_M": 28.42,
+      "twin_accuracy_pct": 87.45,
+      "reward": 66
+    },
+    {
+      "episode": 167,
+      "pue": 1.3375,
+      "avg_temp_c": 62.84,
+      "gpu_density_x": 2.879,
+      "deals_unlocked_M": 28.76,
+      "twin_accuracy_pct": 87.53,
+      "reward": 66
+    },
+    {
+      "episode": 168,
+      "pue": 1.3488,
+      "avg_temp_c": 62.45,
+      "gpu_density_x": 2.89,
+      "deals_unlocked_M": 29.11,
+      "twin_accuracy_pct": 87.6,
+      "reward": 66
+    },
+    {
+      "episode": 169,
+      "pue": 1.3462,
+      "avg_temp_c": 62.86,
+      "gpu_density_x": 2.901,
+      "deals_unlocked_M": 29.45,
+      "twin_accuracy_pct": 87.67,
+      "reward": 66
+    },
+    {
+      "episode": 170,
+      "pue": 1.3486,
+      "avg_temp_c": 62.33,
+      "gpu_density_x": 2.912,
+      "deals_unlocked_M": 29.8,
+      "twin_accuracy_pct": 87.75,
+      "reward": 66
+    },
+    {
+      "episode": 171,
+      "pue": 1.3411,
+      "avg_temp_c": 62.06,
+      "gpu_density_x": 2.924,
+      "deals_unlocked_M": 30.15,
+      "twin_accuracy_pct": 87.83,
+      "reward": 66
+    },
+    {
+      "episode": 172,
+      "pue": 1.3392,
+      "avg_temp_c": 62.18,
+      "gpu_density_x": 2.935,
+      "deals_unlocked_M": 30.51,
+      "twin_accuracy_pct": 87.9,
+      "reward": 66
+    },
+    {
+      "episode": 173,
+      "pue": 1.3404,
+      "avg_temp_c": 62.48,
+      "gpu_density_x": 2.946,
+      "deals_unlocked_M": 30.86,
+      "twin_accuracy_pct": 87.97,
+      "reward": 67
+    },
+    {
+      "episode": 174,
+      "pue": 1.3348,
+      "avg_temp_c": 63.43,
+      "gpu_density_x": 2.958,
+      "deals_unlocked_M": 31.22,
+      "twin_accuracy_pct": 88.05,
+      "reward": 66
+    },
+    {
+      "episode": 175,
+      "pue": 1.3464,
+      "avg_temp_c": 63.42,
+      "gpu_density_x": 2.969,
+      "deals_unlocked_M": 31.58,
+      "twin_accuracy_pct": 88.12,
+      "reward": 65
+    },
+    {
+      "episode": 176,
+      "pue": 1.359,
+      "avg_temp_c": 63.83,
+      "gpu_density_x": 2.98,
+      "deals_unlocked_M": 31.94,
+      "twin_accuracy_pct": 88.2,
+      "reward": 65
+    },
+    {
+      "episode": 177,
+      "pue": 1.3389,
+      "avg_temp_c": 64.19,
+      "gpu_density_x": 2.991,
+      "deals_unlocked_M": 32.31,
+      "twin_accuracy_pct": 88.28,
+      "reward": 65
+    },
+    {
+      "episode": 178,
+      "pue": 1.3587,
+      "avg_temp_c": 64.26,
+      "gpu_density_x": 3.002,
+      "deals_unlocked_M": 32.67,
+      "twin_accuracy_pct": 88.35,
+      "reward": 65
+    },
+    {
+      "episode": 179,
+      "pue": 1.33,
+      "avg_temp_c": 64.4,
+      "gpu_density_x": 3.014,
+      "deals_unlocked_M": 33.04,
+      "twin_accuracy_pct": 88.42,
+      "reward": 65
+    },
+    {
+      "episode": 180,
+      "pue": 1.3392,
+      "avg_temp_c": 64.53,
+      "gpu_density_x": 3.025,
+      "deals_unlocked_M": 33.41,
+      "twin_accuracy_pct": 88.5,
+      "reward": 65
+    },
+    {
+      "episode": 181,
+      "pue": 1.3456,
+      "avg_temp_c": 64.61,
+      "gpu_density_x": 3.036,
+      "deals_unlocked_M": 33.78,
+      "twin_accuracy_pct": 88.58,
+      "reward": 65
+    },
+    {
+      "episode": 182,
+      "pue": 1.3482,
+      "avg_temp_c": 64.78,
+      "gpu_density_x": 3.047,
+      "deals_unlocked_M": 34.16,
+      "twin_accuracy_pct": 88.65,
+      "reward": 65
+    },
+    {
+      "episode": 183,
+      "pue": 1.3248,
+      "avg_temp_c": 64.37,
+      "gpu_density_x": 3.059,
+      "deals_unlocked_M": 34.54,
+      "twin_accuracy_pct": 88.72,
+      "reward": 65
+    },
+    {
+      "episode": 184,
+      "pue": 1.3289,
+      "avg_temp_c": 64.74,
+      "gpu_density_x": 3.07,
+      "deals_unlocked_M": 34.91,
+      "twin_accuracy_pct": 88.8,
+      "reward": 65
+    },
+    {
+      "episode": 185,
+      "pue": 1.3139,
+      "avg_temp_c": 65.12,
+      "gpu_density_x": 3.081,
+      "deals_unlocked_M": 35.29,
+      "twin_accuracy_pct": 88.88,
+      "reward": 65
+    },
+    {
+      "episode": 186,
+      "pue": 1.3168,
+      "avg_temp_c": 65.49,
+      "gpu_density_x": 3.093,
+      "deals_unlocked_M": 35.68,
+      "twin_accuracy_pct": 88.95,
+      "reward": 65
+    },
+    {
+      "episode": 187,
+      "pue": 1.31,
+      "avg_temp_c": 66.1,
+      "gpu_density_x": 3.104,
+      "deals_unlocked_M": 36.06,
+      "twin_accuracy_pct": 89.03,
+      "reward": 65
+    },
+    {
+      "episode": 188,
+      "pue": 1.3208,
+      "avg_temp_c": 66.47,
+      "gpu_density_x": 3.115,
+      "deals_unlocked_M": 36.45,
+      "twin_accuracy_pct": 89.1,
+      "reward": 65
+    },
+    {
+      "episode": 189,
+      "pue": 1.3189,
+      "avg_temp_c": 66.26,
+      "gpu_density_x": 3.126,
+      "deals_unlocked_M": 36.84,
+      "twin_accuracy_pct": 89.17,
+      "reward": 65
+    },
+    {
+      "episode": 190,
+      "pue": 1.3191,
+      "avg_temp_c": 65.82,
+      "gpu_density_x": 3.137,
+      "deals_unlocked_M": 37.23,
+      "twin_accuracy_pct": 89.25,
+      "reward": 64
+    },
+    {
+      "episode": 191,
+      "pue": 1.32,
+      "avg_temp_c": 66.05,
+      "gpu_density_x": 3.149,
+      "deals_unlocked_M": 37.62,
+      "twin_accuracy_pct": 89.33,
+      "reward": 64
+    },
+    {
+      "episode": 192,
+      "pue": 1.3177,
+      "avg_temp_c": 65.41,
+      "gpu_density_x": 3.16,
+      "deals_unlocked_M": 38.02,
+      "twin_accuracy_pct": 89.4,
+      "reward": 65
+    },
+    {
+      "episode": 193,
+      "pue": 1.3173,
+      "avg_temp_c": 65.73,
+      "gpu_density_x": 3.171,
+      "deals_unlocked_M": 38.41,
+      "twin_accuracy_pct": 89.47,
+      "reward": 65
+    },
+    {
+      "episode": 194,
+      "pue": 1.3234,
+      "avg_temp_c": 65.63,
+      "gpu_density_x": 3.183,
+      "deals_unlocked_M": 38.81,
+      "twin_accuracy_pct": 89.55,
+      "reward": 65
+    },
+    {
+      "episode": 195,
+      "pue": 1.3195,
+      "avg_temp_c": 65.01,
+      "gpu_density_x": 3.194,
+      "deals_unlocked_M": 39.21,
+      "twin_accuracy_pct": 89.62,
+      "reward": 65
+    },
+    {
+      "episode": 196,
+      "pue": 1.2886,
+      "avg_temp_c": 65.31,
+      "gpu_density_x": 3.205,
+      "deals_unlocked_M": 39.62,
+      "twin_accuracy_pct": 89.7,
+      "reward": 66
+    },
+    {
+      "episode": 197,
+      "pue": 1.306,
+      "avg_temp_c": 64.92,
+      "gpu_density_x": 3.216,
+      "deals_unlocked_M": 40.02,
+      "twin_accuracy_pct": 89.78,
+      "reward": 65
+    },
+    {
+      "episode": 198,
+      "pue": 1.3101,
+      "avg_temp_c": 64.72,
+      "gpu_density_x": 3.228,
+      "deals_unlocked_M": 40.43,
+      "twin_accuracy_pct": 89.85,
+      "reward": 65
+    },
+    {
+      "episode": 199,
+      "pue": 1.2926,
+      "avg_temp_c": 64.64,
+      "gpu_density_x": 3.239,
+      "deals_unlocked_M": 40.84,
+      "twin_accuracy_pct": 89.92,
+      "reward": 66
+    },
+    {
+      "episode": 200,
+      "pue": 1.3024,
+      "avg_temp_c": 64.29,
+      "gpu_density_x": 3.25,
+      "deals_unlocked_M": 41.25,
+      "twin_accuracy_pct": 90,
+      "reward": 66
+    }
+  ]
+}

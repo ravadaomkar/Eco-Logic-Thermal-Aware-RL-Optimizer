@@ -1,0 +1,44 @@
+# eco-logic/requirements.txt
+
+# Core RL & simulation
+gymnasium==0.29.1
+numpy>=1.24,<2.0
+
+# Deep learning (optional – DQN + ThermalLSTM)
+torch>=2.1.0
+
+# Data & analysis
+pandas>=2.0
+scikit-learn>=1.3
+matplotlib>=3.7
+seaborn>=0.13
+
+# Database
+mysql-connector-python>=8.2
+
+# API & HTTP
+requests>=2.31
+urllib3>=2.0
+
+# Observability
+prometheus-client>=0.19
+
+# Config & utilities
+pyyaml>=6.0
+python-dotenv>=1.0
+tqdm>=4.66
+
+# Notebooks
+jupyter>=1.0
+ipywidgets>=8.0
+plotly>=5.18
+
+# Testing
+pytest>=7.4
+pytest-cov>=4.1
+
+# Code quality
+black>=23.0
+isort>=5.12
+flake8>=6.0
+mypy>=1.5

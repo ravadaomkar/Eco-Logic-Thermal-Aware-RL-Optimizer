@@ -1,0 +1,87 @@
+version: "3.9"
+
+services:
+
+  # ── RL Optimizer ────────────────────────────────────────────────────
+  optimizer:
+    build: .
+    container_name: ecologic_optimizer
+    command: train --episodes 500 --agent qlearning --db mysql://ecologic:ecologic@mysql:3306/ecologic --prometheus
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=ecologic
+      - MYSQL_PASSWORD=ecologic
+      - MYSQL_DB=ecologic
+      - OME_HOST=${OME_HOST:-https://192.168.1.100}
+      - OME_USER=${OME_USER:-admin}
+      - OME_PASSWORD=${OME_PASSWORD:-}
+    volumes:
+      - ./checkpoints:/app/checkpoints
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"       # Prometheus metrics
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+
+  # ── Dashboard server ────────────────────────────────────────────────
+  dashboard:
+    build: .
+    container_name: ecologic_dashboard
+    command: serve --port 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  # ── MySQL ────────────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: ecologic_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ecologic
+      MYSQL_USER: ecologic
+      MYSQL_PASSWORD: ecologic
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./src/db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ecologic", "-pecologic"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Prometheus ───────────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: ecologic_prometheus
+    volumes:
+      - ./docs/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  # ── Grafana ──────────────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: ecologic_grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=ecologic
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  prometheus_data:
+  grafana_data:
