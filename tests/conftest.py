@@ -3,9 +3,11 @@ eco-logic/tests/conftest.py
 Shared pytest fixtures and configuration.
 """
 
-import pytest
+import os
+import sys
+
 import numpy as np
-import sys, os
+import pytest
 
 # Ensure project root is on the path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))

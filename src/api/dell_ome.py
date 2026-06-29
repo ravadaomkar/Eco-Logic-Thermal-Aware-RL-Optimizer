@@ -4,10 +4,11 @@ Dell OpenManage Enterprise REST API client.
 Fetches live rack telemetry and triggers workload migration jobs.
 """
 
-import os
 import logging
+import os
 import time
 from typing import Optional
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry

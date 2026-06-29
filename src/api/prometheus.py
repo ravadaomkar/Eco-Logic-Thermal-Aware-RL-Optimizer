@@ -11,14 +11,8 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 try:
-    from prometheus_client import (
-        Counter,
-        Gauge,
-        Histogram,
-        Summary,
-        start_http_server,
-        REGISTRY,
-    )
+    from prometheus_client import (REGISTRY, Counter, Gauge, Histogram,
+                                   Summary, start_http_server)
 
     PROM_AVAILABLE = True
 except ImportError:

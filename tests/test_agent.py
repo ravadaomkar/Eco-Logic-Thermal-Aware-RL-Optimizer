@@ -3,11 +3,12 @@ eco-logic/tests/test_agent.py
 Unit tests for Q-Learning agent.
 """
 
-import pytest
-import numpy as np
-import tempfile
 import os
 import sys
+import tempfile
+
+import numpy as np
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 

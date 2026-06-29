@@ -1,9 +1,12 @@
 """eco-logic/tests/test_reward.py"""
 
-import pytest, sys, os
+import os
+import sys
+
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from src.rl.reward import compute_reward, reward_breakdown, RewardWeights
+from src.rl.reward import RewardWeights, compute_reward, reward_breakdown
 
 
 class TestReward:

@@ -5,8 +5,8 @@ MySQL data access layer for Eco-Logic.
 
 import logging
 import os
-from typing import Optional, List, Dict, Any
 from contextlib import contextmanager
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 

@@ -3,13 +3,14 @@ eco-logic/src/rl/agent.py
 Q-Learning and Deep Q-Network (DQN) agents for thermal-aware workload placement.
 """
 
-import numpy as np
-import random
 import json
 import logging
+import random
 from collections import deque
 from pathlib import Path
 from typing import Optional, Tuple
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

@@ -10,13 +10,14 @@ import logging
 import time
 from pathlib import Path
 from typing import Optional
+
 import numpy as np
 
-from src.rl.environment import DataCenterEnv
-from src.rl.agent import QLearningAgent, ReplayBuffer
-from src.rl.reward import reward_breakdown
-from src.db.repository import EpisodeRepository
 from src.api.prometheus import PrometheusExporter
+from src.db.repository import EpisodeRepository
+from src.rl.agent import QLearningAgent, ReplayBuffer
+from src.rl.environment import DataCenterEnv
+from src.rl.reward import reward_breakdown
 
 logging.basicConfig(
     level=logging.INFO,

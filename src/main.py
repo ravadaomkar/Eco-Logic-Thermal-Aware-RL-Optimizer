@@ -80,9 +80,10 @@ def cmd_train(args):
 
 
 def cmd_eval(args):
-    from src.rl.environment import DataCenterEnv
-    from src.rl.agent import QLearningAgent
     import numpy as np
+
+    from src.rl.agent import QLearningAgent
+    from src.rl.environment import DataCenterEnv
 
     env = DataCenterEnv(cooling_budget=args.cooling, render_mode="human")
     agent = QLearningAgent(n_actions=env.action_space.n)
@@ -110,8 +111,9 @@ def cmd_eval(args):
 
 def cmd_twin(args):
     try:
-        import pandas as pd
         import numpy as np
+        import pandas as pd
+
         from src.digital_twin.simulator import ThermalTwinModel
 
         df = pd.read_csv(args.data)

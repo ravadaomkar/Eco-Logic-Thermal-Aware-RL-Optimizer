@@ -4,12 +4,13 @@ Thermal-Aware Rack Environment (OpenAI Gym compatible)
 Models a Dell PowerCool 8x8 rack grid with real thermal dynamics.
 """
 
-import numpy as np
-import gymnasium as gym
-from gymnasium import spaces
-from dataclasses import dataclass, field
-from typing import Optional, Tuple, Dict, Any
 import logging
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, Tuple
+
+import gymnasium as gym
+import numpy as np
+from gymnasium import spaces
 
 logger = logging.getLogger(__name__)
 

@@ -1,9 +1,13 @@
 """eco-logic/tests/test_environment.py"""
 
-import pytest, numpy as np, sys, os
+import os
+import sys
+
+import numpy as np
+import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from src.rl.environment import DataCenterEnv, N_RACKS, WL_LIST
+from src.rl.environment import N_RACKS, WL_LIST, DataCenterEnv
 
 
 @pytest.fixture
