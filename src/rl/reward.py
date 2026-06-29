@@ -92,15 +92,28 @@ def reward_breakdown(
         weights = RewardWeights()
 
     return {
-        "pue_term":           round((2.0 - pue) * weights.pue_scale, 3),
-        "temp_term":          round((critical_temp - avg_temp) * weights.temp_scale, 3),
-        "safe_zone_bonus":    weights.safe_zone_bonus if avg_temp < 70 else 0.0,
-        "critical_penalty":   -weights.critical_penalty if max_temp >= critical_temp else 0.0,
-        "efficiency_bonus":   weights.efficiency_milestone if pue <= target_pue + 0.05 else 0.0,
-        "power_penalty":      round(-max(0.0, avg_power - 200.0) * weights.power_penalty, 3),
-        "density_bonus":      round(gpu_density * weights.density_bonus, 3),
-        "total":              round(compute_reward(
-            avg_temp, max_temp, pue, avg_power, gpu_density,
-            target_pue, critical_temp, weights
-        ), 3),
+        "pue_term": round((2.0 - pue) * weights.pue_scale, 3),
+        "temp_term": round((critical_temp - avg_temp) * weights.temp_scale, 3),
+        "safe_zone_bonus": weights.safe_zone_bonus if avg_temp < 70 else 0.0,
+        "critical_penalty": (
+            -weights.critical_penalty if max_temp >= critical_temp else 0.0
+        ),
+        "efficiency_bonus": (
+            weights.efficiency_milestone if pue <= target_pue + 0.05 else 0.0
+        ),
+        "power_penalty": round(-max(0.0, avg_power - 200.0) * weights.power_penalty, 3),
+        "density_bonus": round(gpu_density * weights.density_bonus, 3),
+        "total": round(
+            compute_reward(
+                avg_temp,
+                max_temp,
+                pue,
+                avg_power,
+                gpu_density,
+                target_pue,
+                critical_temp,
+                weights,
+            ),
+            3,
+        ),
     }

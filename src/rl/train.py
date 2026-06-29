@@ -32,6 +32,7 @@ CHECKPOINT_DIR.mkdir(exist_ok=True)
 # Episode runner
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def run_episode(
     env: DataCenterEnv,
     agent: QLearningAgent,
@@ -62,15 +63,15 @@ def run_episode(
         agent.decay_epsilon()
 
     return {
-        "total_reward":  round(total_reward, 2),
-        "steps":         steps,
-        "final_pue":     round(info["pue"], 4),
-        "final_avg_temp":round(info["avg_temp"], 2),
-        "final_max_temp":round(info["max_temp"], 2),
-        "gpu_density":   round(info["gpu_density"], 3),
+        "total_reward": round(total_reward, 2),
+        "steps": steps,
+        "final_pue": round(info["pue"], 4),
+        "final_avg_temp": round(info["avg_temp"], 2),
+        "final_max_temp": round(info["max_temp"], 2),
+        "gpu_density": round(info["gpu_density"], 3),
         "mean_td_error": round(float(np.mean(td_errors)) if td_errors else 0, 4),
-        "epsilon":       round(agent.epsilon, 4),
-        "terminated":    terminated,
+        "epsilon": round(agent.epsilon, 4),
+        "terminated": terminated,
     }
 
 
@@ -78,10 +79,11 @@ def run_episode(
 # Main training loop
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def train(
     n_episodes: int = 500,
     cooling_budget: float = 0.75,
-    agent_type: str = "qlearning",    # "qlearning" | "dqn"
+    agent_type: str = "qlearning",  # "qlearning" | "dqn"
     save_every: int = 50,
     eval_every: int = 25,
     db_url: Optional[str] = None,
@@ -89,7 +91,9 @@ def train(
     seed: int = 42,
 ):
     logger.info(f"=== Eco-Logic RL Training ===")
-    logger.info(f"Agent: {agent_type} | Episodes: {n_episodes} | Cooling budget: {cooling_budget}")
+    logger.info(
+        f"Agent: {agent_type} | Episodes: {n_episodes} | Cooling budget: {cooling_budget}"
+    )
 
     env = DataCenterEnv(cooling_budget=cooling_budget, max_steps=200, render_mode=None)
     env.reset(seed=seed)
@@ -100,6 +104,7 @@ def train(
     if agent_type == "dqn":
         try:
             from src.rl.agent import DQNAgent
+
             obs_size = env.observation_space.shape[0]
             agent = DQNAgent(obs_size=obs_size, n_actions=n_actions)
             is_dqn = True
@@ -165,7 +170,7 @@ def train(
 
     # Final summary
     rewards = [h["total_reward"] for h in history]
-    pues    = [h["final_pue"]    for h in history]
+    pues = [h["final_pue"] for h in history]
     logger.info("=== Training Complete ===")
     logger.info(f"Best reward   : {max(rewards):+.1f}")
     logger.info(f"Avg reward    : {np.mean(rewards):+.1f}")
@@ -185,14 +190,20 @@ def train(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Eco-Logic RL Trainer")
-    parser.add_argument("--episodes",  type=int,   default=200,          help="Number of training episodes")
-    parser.add_argument("--cooling",   type=float, default=0.75,         help="Cooling budget [0–1]")
-    parser.add_argument("--agent",     type=str,   default="qlearning",  choices=["qlearning", "dqn"])
-    parser.add_argument("--save-every",type=int,   default=50)
-    parser.add_argument("--eval-every",type=int,   default=25)
-    parser.add_argument("--db",        type=str,   default=None,         help="MySQL connection URL")
-    parser.add_argument("--prometheus",action="store_true")
-    parser.add_argument("--seed",      type=int,   default=42)
+    parser.add_argument(
+        "--episodes", type=int, default=200, help="Number of training episodes"
+    )
+    parser.add_argument(
+        "--cooling", type=float, default=0.75, help="Cooling budget [0–1]"
+    )
+    parser.add_argument(
+        "--agent", type=str, default="qlearning", choices=["qlearning", "dqn"]
+    )
+    parser.add_argument("--save-every", type=int, default=50)
+    parser.add_argument("--eval-every", type=int, default=25)
+    parser.add_argument("--db", type=str, default=None, help="MySQL connection URL")
+    parser.add_argument("--prometheus", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
     train(

@@ -15,18 +15,20 @@ logger = logging.getLogger(__name__)
 # Physics-based simulator (fast, no ML)
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 @dataclass
 class ThermalPhysicsConfig:
     """
     Parameters for the thermal physics model.
     Calibrated for Dell PowerCool liquid-cooled racks.
     """
-    thermal_resistance: float = 0.08    # K/W — rack thermal resistance
-    heat_capacity: float = 2500.0       # J/K — effective rack heat capacity
-    ambient_temp: float = 22.0          # °C  — data center ambient
-    coolant_temp_in: float = 18.0       # °C  — liquid coolant inlet temperature
-    max_coolant_flow: float = 150.0     # L/min per rack
-    dt: float = 30.0                    # seconds per simulation step
+
+    thermal_resistance: float = 0.08  # K/W — rack thermal resistance
+    heat_capacity: float = 2500.0  # J/K — effective rack heat capacity
+    ambient_temp: float = 22.0  # °C  — data center ambient
+    coolant_temp_in: float = 18.0  # °C  — liquid coolant inlet temperature
+    max_coolant_flow: float = 150.0  # L/min per rack
+    dt: float = 30.0  # seconds per simulation step
 
 
 class ThermalPhysicsSimulator:
@@ -85,11 +87,11 @@ class ThermalPhysicsSimulator:
         pue_contrib = (power_w + pump_power) / max(power_w, 1)
 
         return {
-            "next_temp":       next_temp,
-            "heat_removed_w":  q_removed,
-            "pump_power_w":    pump_power,
+            "next_temp": next_temp,
+            "heat_removed_w": q_removed,
+            "pump_power_w": pump_power,
             "pue_contribution": pue_contrib,
-            "thermal_spike":   next_temp > 78.0,
+            "thermal_spike": next_temp > 78.0,
         }
 
     def predict_horizon(
@@ -97,7 +99,7 @@ class ThermalPhysicsSimulator:
         temp_c: float,
         power_w: float,
         coolant_flow: float,
-        horizon_steps: int = 20,   # 10 minutes at 30s steps
+        horizon_steps: int = 20,  # 10 minutes at 30s steps
     ) -> list:
         """Roll out simulation for `horizon_steps` steps."""
         results = []
@@ -116,6 +118,7 @@ class ThermalPhysicsSimulator:
 try:
     import torch
     import torch.nn as nn
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
@@ -131,9 +134,12 @@ if TORCH_AVAILABLE:
         Input features (per timestep):
             [temp, power, coolant_flow, pue, hour_sin, hour_cos]
         """
+
         INPUT_SIZE = 6
 
-        def __init__(self, hidden_size: int = 128, num_layers: int = 2, dropout: float = 0.2):
+        def __init__(
+            self, hidden_size: int = 128, num_layers: int = 2, dropout: float = 0.2
+        ):
             super().__init__()
             self.lstm = nn.LSTM(
                 input_size=self.INPUT_SIZE,
@@ -153,8 +159,7 @@ if TORCH_AVAILABLE:
         def forward(self, x: "torch.Tensor") -> "torch.Tensor":
             # x: (batch, seq_len, INPUT_SIZE)
             out, _ = self.lstm(x)
-            return self.head(out[:, -1, :])   # (batch, 1)
-
+            return self.head(out[:, -1, :])  # (batch, 1)
 
     class ThermalTwinModel:
         """
@@ -165,15 +170,17 @@ if TORCH_AVAILABLE:
             self,
             hidden_size: int = 128,
             num_layers: int = 2,
-            seq_len: int = 30,       # 15-minute history at 30s steps
+            seq_len: int = 30,  # 15-minute history at 30s steps
             device: Optional[str] = None,
         ):
             self.seq_len = seq_len
-            self.device  = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
-            self.model   = ThermalLSTM(hidden_size, num_layers).to(self.device)
+            self.device = torch.device(
+                device or ("cuda" if torch.cuda.is_available() else "cpu")
+            )
+            self.model = ThermalLSTM(hidden_size, num_layers).to(self.device)
             self.optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
-            self.loss_fn   = nn.BCELoss()
-            self._trained  = False
+            self.loss_fn = nn.BCELoss()
+            self._trained = False
             logger.info(f"ThermalTwinModel ready on {self.device}")
 
         def _to_tensor(self, arr: np.ndarray) -> "torch.Tensor":
@@ -188,7 +195,7 @@ if TORCH_AVAILABLE:
             """
             self.model.eval()
             with torch.no_grad():
-                x = self._to_tensor(window).unsqueeze(0)   # (1, seq, 6)
+                x = self._to_tensor(window).unsqueeze(0)  # (1, seq, 6)
                 prob = self.model(x).item()
             return prob
 
@@ -223,16 +230,16 @@ if TORCH_AVAILABLE:
             fn = int(((preds == 0) & (y == 1)).sum())
             tn = int(((preds == 0) & (y == 0)).sum())
 
-            accuracy  = (tp + tn) / len(y)
+            accuracy = (tp + tn) / len(y)
             precision = tp / max(tp + fp, 1)
-            recall    = tp / max(tp + fn, 1)
-            f1        = 2 * precision * recall / max(precision + recall, 1e-9)
+            recall = tp / max(tp + fn, 1)
+            f1 = 2 * precision * recall / max(precision + recall, 1e-9)
 
             return {
-                "accuracy":  round(accuracy,  4),
+                "accuracy": round(accuracy, 4),
                 "precision": round(precision, 4),
-                "recall":    round(recall,    4),
-                "f1":        round(f1,        4),
+                "recall": round(recall, 4),
+                "f1": round(f1, 4),
             }
 
         def save(self, path: str) -> None:

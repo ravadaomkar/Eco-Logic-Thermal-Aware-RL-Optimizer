@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 # Q-Learning Agent (tabular, discretised state)
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class QLearningAgent:
     """
     Tabular Q-Learning agent.
@@ -27,9 +28,9 @@ class QLearningAgent:
     def __init__(
         self,
         n_actions: int,
-        alpha: float = 0.1,        # learning rate
-        gamma: float = 0.95,       # discount factor
-        epsilon: float = 1.0,      # initial exploration rate
+        alpha: float = 0.1,  # learning rate
+        gamma: float = 0.95,  # discount factor
+        epsilon: float = 1.0,  # initial exploration rate
         epsilon_min: float = 0.05,
         epsilon_decay: float = 0.995,
         n_temp_bins: int = 10,
@@ -58,8 +59,14 @@ class QLearningAgent:
         avg_temp = float(np.mean(obs[:n_racks]))
         pue = float(obs[-2])
 
-        temp_bin = int(np.clip((avg_temp - 28) / (90 - 28) * self.n_temp_bins, 0, self.n_temp_bins - 1))
-        pue_bin  = int(np.clip((pue - 1.0) / (2.5 - 1.0) * self.n_pue_bins,   0, self.n_pue_bins - 1))
+        temp_bin = int(
+            np.clip(
+                (avg_temp - 28) / (90 - 28) * self.n_temp_bins, 0, self.n_temp_bins - 1
+            )
+        )
+        pue_bin = int(
+            np.clip((pue - 1.0) / (2.5 - 1.0) * self.n_pue_bins, 0, self.n_pue_bins - 1)
+        )
         return temp_bin, pue_bin
 
     # ── Policy ────────────────────────────────────────────────────────
@@ -82,8 +89,8 @@ class QLearningAgent:
         nt, np_ = self._discretise(next_obs)
 
         q_current = self.q_table[t, p, action]
-        q_target  = reward + (0 if done else self.gamma * np.max(self.q_table[nt, np_]))
-        td_error  = q_target - q_current
+        q_target = reward + (0 if done else self.gamma * np.max(self.q_table[nt, np_]))
+        td_error = q_target - q_current
 
         self.q_table[t, p, action] += self.alpha * td_error
         self.step_count += 1
@@ -118,6 +125,7 @@ class QLearningAgent:
 # Replay Buffer
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 class ReplayBuffer:
     def __init__(self, capacity: int = 50_000):
         self.buffer: deque = deque(maxlen=capacity)
@@ -129,11 +137,11 @@ class ReplayBuffer:
         batch = random.sample(self.buffer, batch_size)
         obs, actions, rewards, next_obs, dones = zip(*batch)
         return (
-            np.array(obs,      dtype=np.float32),
-            np.array(actions,  dtype=np.int64),
-            np.array(rewards,  dtype=np.float32),
+            np.array(obs, dtype=np.float32),
+            np.array(actions, dtype=np.int64),
+            np.array(rewards, dtype=np.float32),
             np.array(next_obs, dtype=np.float32),
-            np.array(dones,    dtype=np.float32),
+            np.array(dones, dtype=np.float32),
         )
 
     def __len__(self) -> int:
@@ -148,10 +156,13 @@ try:
     import torch
     import torch.nn as nn
     import torch.optim as optim
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
-    logger.warning("PyTorch not found; DQNAgent unavailable. Install: pip install torch")
+    logger.warning(
+        "PyTorch not found; DQNAgent unavailable. Install: pip install torch"
+    )
 
 
 if TORCH_AVAILABLE:
@@ -171,7 +182,6 @@ if TORCH_AVAILABLE:
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             return self.net(x)
-
 
     class DQNAgent:
         """
@@ -211,14 +221,16 @@ if TORCH_AVAILABLE:
             self.target_net.eval()
 
             self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
-            self.loss_fn   = nn.SmoothL1Loss()
-            self.buffer    = ReplayBuffer(buffer_capacity)
+            self.loss_fn = nn.SmoothL1Loss()
+            self.buffer = ReplayBuffer(buffer_capacity)
 
-            self.step_count    = 0
+            self.step_count = 0
             self.episode_count = 0
             self.losses: list[float] = []
 
-            logger.info(f"DQNAgent ready on {self.device} | obs={obs_size} actions={n_actions}")
+            logger.info(
+                f"DQNAgent ready on {self.device} | obs={obs_size} actions={n_actions}"
+            )
 
         # ── Policy ────────────────────────────────────────────────────
 
@@ -240,11 +252,11 @@ if TORCH_AVAILABLE:
 
             obs, actions, rewards, next_obs, dones = self.buffer.sample(self.batch_size)
 
-            obs_t      = torch.FloatTensor(obs).to(self.device)
-            actions_t  = torch.LongTensor(actions).unsqueeze(1).to(self.device)
-            rewards_t  = torch.FloatTensor(rewards).unsqueeze(1).to(self.device)
+            obs_t = torch.FloatTensor(obs).to(self.device)
+            actions_t = torch.LongTensor(actions).unsqueeze(1).to(self.device)
+            rewards_t = torch.FloatTensor(rewards).unsqueeze(1).to(self.device)
             next_obs_t = torch.FloatTensor(next_obs).to(self.device)
-            dones_t    = torch.FloatTensor(dones).unsqueeze(1).to(self.device)
+            dones_t = torch.FloatTensor(dones).unsqueeze(1).to(self.device)
 
             # Current Q values
             q_vals = self.policy_net(obs_t).gather(1, actions_t)
@@ -252,8 +264,8 @@ if TORCH_AVAILABLE:
             # Target Q values (Double DQN)
             with torch.no_grad():
                 next_actions = self.policy_net(next_obs_t).argmax(1, keepdim=True)
-                next_q       = self.target_net(next_obs_t).gather(1, next_actions)
-                target_q     = rewards_t + self.gamma * next_q * (1 - dones_t)
+                next_q = self.target_net(next_obs_t).gather(1, next_actions)
+                target_q = rewards_t + self.gamma * next_q * (1 - dones_t)
 
             loss = self.loss_fn(q_vals, target_q)
             self.optimizer.zero_grad()
@@ -278,14 +290,17 @@ if TORCH_AVAILABLE:
         # ── Persistence ───────────────────────────────────────────────
 
         def save(self, path: str) -> None:
-            torch.save({
-                "policy_state_dict": self.policy_net.state_dict(),
-                "target_state_dict": self.target_net.state_dict(),
-                "optimizer_state":   self.optimizer.state_dict(),
-                "epsilon":           self.epsilon,
-                "step_count":        self.step_count,
-                "episode_count":     self.episode_count,
-            }, path)
+            torch.save(
+                {
+                    "policy_state_dict": self.policy_net.state_dict(),
+                    "target_state_dict": self.target_net.state_dict(),
+                    "optimizer_state": self.optimizer.state_dict(),
+                    "epsilon": self.epsilon,
+                    "step_count": self.step_count,
+                    "episode_count": self.episode_count,
+                },
+                path,
+            )
             logger.info(f"DQN model saved → {path}")
 
         def load(self, path: str) -> None:
@@ -293,7 +308,7 @@ if TORCH_AVAILABLE:
             self.policy_net.load_state_dict(ckpt["policy_state_dict"])
             self.target_net.load_state_dict(ckpt["target_state_dict"])
             self.optimizer.load_state_dict(ckpt["optimizer_state"])
-            self.epsilon     = ckpt["epsilon"]
-            self.step_count  = ckpt["step_count"]
+            self.epsilon = ckpt["epsilon"]
+            self.step_count = ckpt["step_count"]
             self.episode_count = ckpt["episode_count"]
             logger.info(f"DQN model loaded ← {path}")

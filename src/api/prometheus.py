@@ -12,13 +12,20 @@ logger = logging.getLogger(__name__)
 
 try:
     from prometheus_client import (
-        Counter, Gauge, Histogram, Summary,
-        start_http_server, REGISTRY,
+        Counter,
+        Gauge,
+        Histogram,
+        Summary,
+        start_http_server,
+        REGISTRY,
     )
+
     PROM_AVAILABLE = True
 except ImportError:
     PROM_AVAILABLE = False
-    logger.warning("prometheus_client not installed. Run: pip install prometheus-client")
+    logger.warning(
+        "prometheus_client not installed. Run: pip install prometheus-client"
+    )
 
 
 class PrometheusExporter:
@@ -111,12 +118,12 @@ class PrometheusExporter:
         if not self._enabled:
             return
 
-        pue     = stats.get("final_pue", 0)
-        avg_t   = stats.get("final_avg_temp", 0)
-        max_t   = stats.get("final_max_temp", 0)
+        pue = stats.get("final_pue", 0)
+        avg_t = stats.get("final_avg_temp", 0)
+        max_t = stats.get("final_max_temp", 0)
         density = stats.get("gpu_density", 1.0)
-        eps     = stats.get("epsilon", 0)
-        reward  = stats.get("total_reward", 0)
+        eps = stats.get("epsilon", 0)
+        reward = stats.get("total_reward", 0)
 
         self.pue.set(pue)
         self.avg_temp.set(avg_t)
@@ -126,12 +133,12 @@ class PrometheusExporter:
         self.episode_reward.set(reward)
 
         # Derived metrics
-        self.liquid_flow.set(density * 22 * 60)    # rough estimate L/min
-        self.inlet_temp.set(max(18, avg_t - 22))   # coolant inlet ≈ rack avg - 22
+        self.liquid_flow.set(density * 22 * 60)  # rough estimate L/min
+        self.inlet_temp.set(max(18, avg_t - 22))  # coolant inlet ≈ rack avg - 22
 
         # Counters
         self.episodes_total.inc()
-        self.migrations_total.inc()                 # at least 1 action per episode
+        self.migrations_total.inc()  # at least 1 action per episode
         if stats.get("terminated", False):
             self.thermal_violations_total.inc()
 
@@ -151,4 +158,4 @@ class PrometheusExporter:
             return
         # Per-rack gauges are created lazily with labels
         # Prometheus client handles label cardinality; fine for 64 racks
-        pass   # extend with LabelledGauge if per-rack detail needed
+        pass  # extend with LabelledGauge if per-rack detail needed

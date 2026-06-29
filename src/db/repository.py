@@ -13,10 +13,13 @@ logger = logging.getLogger(__name__)
 try:
     import mysql.connector
     from mysql.connector.pooling import MySQLConnectionPool
+
     MYSQL_AVAILABLE = True
 except ImportError:
     MYSQL_AVAILABLE = False
-    logger.warning("mysql-connector-python not installed. Run: pip install mysql-connector-python")
+    logger.warning(
+        "mysql-connector-python not installed. Run: pip install mysql-connector-python"
+    )
 
 
 class EpisodeRepository:
@@ -32,18 +35,19 @@ class EpisodeRepository:
 
         # Parse URL or fall back to env vars
         # Expected format: mysql://user:pass@host:3306/ecologic
-        host     = os.environ.get("MYSQL_HOST",     "localhost")
-        port     = int(os.environ.get("MYSQL_PORT", "3306"))
-        user     = os.environ.get("MYSQL_USER",     "ecologic")
+        host = os.environ.get("MYSQL_HOST", "localhost")
+        port = int(os.environ.get("MYSQL_PORT", "3306"))
+        user = os.environ.get("MYSQL_USER", "ecologic")
         password = os.environ.get("MYSQL_PASSWORD", "")
-        database = os.environ.get("MYSQL_DB",       "ecologic")
+        database = os.environ.get("MYSQL_DB", "ecologic")
 
         if db_url:
             from urllib.parse import urlparse
+
             p = urlparse(db_url)
-            host     = p.hostname or host
-            port     = p.port or port
-            user     = p.username or user
+            host = p.hostname or host
+            port = p.port or port
+            user = p.username or user
             password = p.password or password
             database = (p.path or "/ecologic").lstrip("/") or database
 
@@ -98,17 +102,17 @@ class EpisodeRepository:
             )
         """
         params = {
-            "episode":       episode,
-            "total_reward":  stats.get("total_reward", 0),
+            "episode": episode,
+            "total_reward": stats.get("total_reward", 0),
             "mean_td_error": stats.get("mean_td_error"),
-            "epsilon":       stats.get("epsilon", 0),
-            "steps":         stats.get("steps", 0),
-            "terminated":    int(stats.get("terminated", False)),
-            "final_pue":     stats.get("final_pue", 0),
-            "final_avg_temp":stats.get("final_avg_temp", 0),
-            "final_max_temp":stats.get("final_max_temp", 0),
-            "gpu_density":   stats.get("gpu_density", 1.0),
-            "elapsed_s":     stats.get("elapsed_s"),
+            "epsilon": stats.get("epsilon", 0),
+            "steps": stats.get("steps", 0),
+            "terminated": int(stats.get("terminated", False)),
+            "final_pue": stats.get("final_pue", 0),
+            "final_avg_temp": stats.get("final_avg_temp", 0),
+            "final_max_temp": stats.get("final_max_temp", 0),
+            "gpu_density": stats.get("gpu_density", 1.0),
+            "elapsed_s": stats.get("elapsed_s"),
         }
         with self._cursor() as cur:
             if cur is None:
@@ -151,7 +155,19 @@ class EpisodeRepository:
         """
         with self._cursor() as cur:
             if cur:
-                cur.execute(sql, (episode_id, step, action, rack_idx, workload_type, reward, avg_temp, pue))
+                cur.execute(
+                    sql,
+                    (
+                        episode_id,
+                        step,
+                        action,
+                        rack_idx,
+                        workload_type,
+                        reward,
+                        avg_temp,
+                        pue,
+                    ),
+                )
 
     # ── Queries ───────────────────────────────────────────────────────
 
@@ -166,7 +182,9 @@ class EpisodeRepository:
         with self._cursor() as cur:
             if cur is None:
                 return []
-            cur.execute("SELECT * FROM v_pue_trend ORDER BY episode DESC LIMIT %s", (limit,))
+            cur.execute(
+                "SELECT * FROM v_pue_trend ORDER BY episode DESC LIMIT %s", (limit,)
+            )
             return cur.fetchall()
 
     def get_best_episodes(self, top_n: int = 10) -> List[Dict]:
@@ -175,6 +193,6 @@ class EpisodeRepository:
                 return []
             cur.execute(
                 "SELECT * FROM rl_episodes ORDER BY total_reward DESC LIMIT %s",
-                (top_n,)
+                (top_n,),
             )
             return cur.fetchall()

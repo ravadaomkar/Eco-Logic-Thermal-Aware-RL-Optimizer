@@ -19,11 +19,11 @@ N_RACKS = RACK_ROWS * RACK_COLS  # 64
 
 # Workload type encoding
 WL_TYPES = {
-    "ML":        {"power_draw": 850, "heat_factor": 1.4},
-    "DB":        {"power_draw": 320, "heat_factor": 0.8},
+    "ML": {"power_draw": 850, "heat_factor": 1.4},
+    "DB": {"power_draw": 320, "heat_factor": 0.8},
     "INFERENCE": {"power_draw": 520, "heat_factor": 1.1},
-    "VIDEO":     {"power_draw": 680, "heat_factor": 1.2},
-    "IDLE":      {"power_draw":  50, "heat_factor": 0.2},
+    "VIDEO": {"power_draw": 680, "heat_factor": 1.2},
+    "IDLE": {"power_draw": 50, "heat_factor": 0.2},
 }
 WL_LIST = list(WL_TYPES.keys())
 N_WL = len(WL_LIST)
@@ -31,9 +31,9 @@ N_WL = len(WL_LIST)
 
 @dataclass
 class RackState:
-    temp: float          # Celsius
-    power: float         # Watts
-    workload: str        # WL_TYPES key
+    temp: float  # Celsius
+    power: float  # Watts
+    workload: str  # WL_TYPES key
     coolant_flow: float  # L/min
 
 
@@ -63,14 +63,14 @@ class DataCenterEnv(gym.Env):
         render_mode: Optional[str] = None,
     ):
         super().__init__()
-        self.cooling_budget = cooling_budget   # 0–1
+        self.cooling_budget = cooling_budget  # 0–1
         self.max_steps = max_steps
         self.target_pue = target_pue
         self.critical_temp = critical_temp
         self.render_mode = render_mode
 
         # ── Observation space ──────────────────────────────────────────
-        obs_size = N_RACKS + N_RACKS + 1 + 1   # temps + powers + pue + time
+        obs_size = N_RACKS + N_RACKS + 1 + 1  # temps + powers + pue + time
         self.observation_space = spaces.Box(
             low=np.float32([28.0] * N_RACKS + [50.0] * N_RACKS + [1.0, 0.0]),
             high=np.float32([90.0] * N_RACKS + [1200.0] * N_RACKS + [2.5, 1.0]),
@@ -84,7 +84,7 @@ class DataCenterEnv(gym.Env):
         self.racks: list[RackState] = []
         self.pue: float = 1.61
         self.step_count: int = 0
-        self.time_of_day: float = 0.0           # fraction of 24h
+        self.time_of_day: float = 0.0  # fraction of 24h
         self.episode_rewards: list[float] = []
 
     # ──────────────────────────────────────────────────────────────────
@@ -119,7 +119,7 @@ class DataCenterEnv(gym.Env):
         assert self.action_space.contains(action), f"Invalid action: {action}"
 
         rack_idx = action // N_WL
-        wl_type  = WL_LIST[action % N_WL]
+        wl_type = WL_LIST[action % N_WL]
 
         # Apply action: place workload on chosen rack
         self._place_workload(rack_idx, wl_type)
@@ -131,7 +131,7 @@ class DataCenterEnv(gym.Env):
         self._update_pue()
 
         # Advance simulated time (30-min intervals)
-        self.time_of_day = (self.time_of_day + 1/48) % 1.0
+        self.time_of_day = (self.time_of_day + 1 / 48) % 1.0
         self.step_count += 1
 
         # Compute reward
@@ -140,13 +140,13 @@ class DataCenterEnv(gym.Env):
 
         # Termination conditions
         terminated = self._is_terminated()
-        truncated  = self.step_count >= self.max_steps
+        truncated = self.step_count >= self.max_steps
 
         info = {
-            "pue":           self.pue,
-            "avg_temp":      np.mean([r.temp for r in self.racks]),
-            "max_temp":      np.max([r.temp for r in self.racks]),
-            "gpu_density":   self._gpu_density(),
+            "pue": self.pue,
+            "avg_temp": np.mean([r.temp for r in self.racks]),
+            "max_temp": np.max([r.temp for r in self.racks]),
+            "gpu_density": self._gpu_density(),
             "episode_return": sum(self.episode_rewards),
         }
 
@@ -169,7 +169,7 @@ class DataCenterEnv(gym.Env):
     # ──────────────────────────────────────────────────────────────────
 
     def _get_obs(self) -> np.ndarray:
-        temps  = np.array([r.temp  for r in self.racks], dtype=np.float32)
+        temps = np.array([r.temp for r in self.racks], dtype=np.float32)
         powers = np.array([r.power for r in self.racks], dtype=np.float32)
         return np.concatenate([temps, powers, [self.pue], [self.time_of_day]])
 
@@ -177,21 +177,26 @@ class DataCenterEnv(gym.Env):
         wl = WL_TYPES[wl_type]
         rack = self.racks[rack_idx]
         rack.workload = wl_type
-        rack.power    = float(np.clip(
-            rack.power * 0.7 + wl["power_draw"] * 0.3 + self.np_random.normal(0, 20),
-            50, 1200
-        ))
+        rack.power = float(
+            np.clip(
+                rack.power * 0.7
+                + wl["power_draw"] * 0.3
+                + self.np_random.normal(0, 20),
+                50,
+                1200,
+            )
+        )
 
     def _thermal_step(self) -> None:
         """Simulate heat dissipation + workload heat generation for one step."""
         cooling_eff = self.cooling_budget
         for i, rack in enumerate(self.racks):
-            wl    = WL_TYPES[rack.workload]
+            wl = WL_TYPES[rack.workload]
             # Heat generated by workload
-            heat_in  = wl["heat_factor"] * (rack.power / 850) * 4.0
+            heat_in = wl["heat_factor"] * (rack.power / 850) * 4.0
             # Cooling removes heat proportional to budget + coolant flow
             heat_out = cooling_eff * (rack.coolant_flow / 120) * 5.0
-            noise    = float(self.np_random.normal(0, 0.5))
+            noise = float(self.np_random.normal(0, 0.5))
             rack.temp = float(np.clip(rack.temp + heat_in - heat_out + noise, 28, 90))
             # Adjust coolant flow based on current temp (feedback control)
             if rack.temp > 70:
@@ -201,17 +206,17 @@ class DataCenterEnv(gym.Env):
 
     def _update_pue(self) -> None:
         """PUE = Total Facility Power / IT Equipment Power."""
-        it_power      = sum(r.power for r in self.racks)
+        it_power = sum(r.power for r in self.racks)
         cooling_power = sum(
-            r.coolant_flow * 0.05 for r in self.racks   # pump power estimate
+            r.coolant_flow * 0.05 for r in self.racks  # pump power estimate
         )
-        total_power   = it_power + cooling_power + 5000  # lighting/UPS overhead
-        self.pue      = float(np.clip(total_power / max(it_power, 1), 1.0, 2.5))
+        total_power = it_power + cooling_power + 5000  # lighting/UPS overhead
+        self.pue = float(np.clip(total_power / max(it_power, 1), 1.0, 2.5))
 
     def _compute_reward(self) -> float:
-        temps  = [r.temp for r in self.racks]
-        avg_t  = float(np.mean(temps))
-        max_t  = float(np.max(temps))
+        temps = [r.temp for r in self.racks]
+        avg_t = float(np.mean(temps))
+        max_t = float(np.max(temps))
         avg_pw = float(np.mean([r.power for r in self.racks]))
 
         reward = 0.0
@@ -225,7 +230,7 @@ class DataCenterEnv(gym.Env):
         if avg_t < 70:
             reward += 15.0
         if max_t > self.critical_temp:
-            reward -= 50.0            # hard penalty for thermal runaway
+            reward -= 50.0  # hard penalty for thermal runaway
 
         # Efficiency milestone
         if self.pue <= self.target_pue + 0.05:
@@ -245,4 +250,4 @@ class DataCenterEnv(gym.Env):
 
     def _gpu_density(self) -> float:
         ml_racks = sum(1 for r in self.racks if r.workload == "ML")
-        return max(1.0, ml_racks / 16.0 * 4.0)   # normalised to 4× target
+        return max(1.0, ml_racks / 16.0 * 4.0)  # normalised to 4× target

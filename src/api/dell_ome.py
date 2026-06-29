@@ -27,10 +27,10 @@ class DellOMEClient:
     API docs: https://developer.dell.com/apis/2878/versions/4.0/openapi.yaml
     """
 
-    AUTH_ENDPOINT    = "/api/SessionService/Sessions"
+    AUTH_ENDPOINT = "/api/SessionService/Sessions"
     DEVICES_ENDPOINT = "/api/DeviceService/Devices"
-    METRIC_ENDPOINT  = "/api/MetricService/MetricData"
-    JOBS_ENDPOINT    = "/api/JobService/Jobs"
+    METRIC_ENDPOINT = "/api/MetricService/MetricData"
+    JOBS_ENDPOINT = "/api/JobService/Jobs"
 
     def __init__(
         self,
@@ -40,20 +40,21 @@ class DellOMEClient:
         verify_ssl: bool = False,
         timeout: int = 30,
     ):
-        self.host     = (host or os.environ.get("OME_HOST", "")).rstrip("/")
+        self.host = (host or os.environ.get("OME_HOST", "")).rstrip("/")
         self.username = username or os.environ.get("OME_USER", "admin")
         self.password = password or os.environ.get("OME_PASSWORD", "")
-        self.verify   = verify_ssl
-        self.timeout  = timeout
+        self.verify = verify_ssl
+        self.timeout = timeout
         self._token: Optional[str] = None
 
         self.session = requests.Session()
         retry = Retry(total=3, backoff_factor=0.5, status_forcelist=[500, 502, 503])
         self.session.mount("https://", HTTPAdapter(max_retries=retry))
-        self.session.mount("http://",  HTTPAdapter(max_retries=retry))
+        self.session.mount("http://", HTTPAdapter(max_retries=retry))
 
         if not verify_ssl:
             import urllib3
+
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     # ── Auth ──────────────────────────────────────────────────────────
@@ -61,12 +62,20 @@ class DellOMEClient:
     def authenticate(self) -> bool:
         """Obtain a session token from OME."""
         url = self.host + self.AUTH_ENDPOINT
-        payload = {"UserName": self.username, "Password": self.password, "SessionType": "API"}
+        payload = {
+            "UserName": self.username,
+            "Password": self.password,
+            "SessionType": "API",
+        }
         try:
-            resp = self.session.post(url, json=payload, verify=self.verify, timeout=self.timeout)
+            resp = self.session.post(
+                url, json=payload, verify=self.verify, timeout=self.timeout
+            )
             resp.raise_for_status()
             self._token = resp.headers.get("X-Auth-Token")
-            self.session.headers.update({"X-Auth-Token": self._token, "Content-Type": "application/json"})
+            self.session.headers.update(
+                {"X-Auth-Token": self._token, "Content-Type": "application/json"}
+            )
             logger.info(f"Authenticated with OME at {self.host}")
             return True
         except requests.RequestException as e:
@@ -112,7 +121,9 @@ class DellOMEClient:
             "GroupType": "AllDevices",
         }
         try:
-            resp = self.session.post(url, json=payload, verify=self.verify, timeout=self.timeout)
+            resp = self.session.post(
+                url, json=payload, verify=self.verify, timeout=self.timeout
+            )
             resp.raise_for_status()
             return resp.json().get("value", [])
         except requests.RequestException as e:
@@ -133,10 +144,13 @@ class DellOMEClient:
             if dev_id not in result:
                 result[dev_id] = {"temp": None, "power": None, "coolant_flow": None}
             name = entry.get("MetricName", "")
-            val  = entry.get("Value")
-            if name == "InletTemperature":   result[dev_id]["temp"]         = float(val)
-            if name == "PowerConsumption":   result[dev_id]["power"]        = float(val)
-            if name == "CoolantFlowRate":    result[dev_id]["coolant_flow"] = float(val)
+            val = entry.get("Value")
+            if name == "InletTemperature":
+                result[dev_id]["temp"] = float(val)
+            if name == "PowerConsumption":
+                result[dev_id]["power"] = float(val)
+            if name == "CoolantFlowRate":
+                result[dev_id]["coolant_flow"] = float(val)
         return result
 
     # ── Workload orchestration via Jobs API ───────────────────────────
@@ -161,18 +175,22 @@ class DellOMEClient:
             "State": "Enabled",
             "JobType": {"Id": 5, "Name": "Update_Task"},
             "Params": [
-                {"Key": "source_rack",    "Value": str(source_rack_id)},
-                {"Key": "target_rack",    "Value": str(target_rack_id)},
-                {"Key": "workload_name",  "Value": workload_name},
-                {"Key": "optimization",   "Value": "thermal_rl"},
+                {"Key": "source_rack", "Value": str(source_rack_id)},
+                {"Key": "target_rack", "Value": str(target_rack_id)},
+                {"Key": "workload_name", "Value": workload_name},
+                {"Key": "optimization", "Value": "thermal_rl"},
             ],
             "Targets": [{"Id": source_rack_id, "Type": {"Id": 1000, "Name": "DEVICE"}}],
         }
         try:
-            resp = self.session.post(url, json=payload, verify=self.verify, timeout=self.timeout)
+            resp = self.session.post(
+                url, json=payload, verify=self.verify, timeout=self.timeout
+            )
             resp.raise_for_status()
             job_id = resp.json().get("Id")
-            logger.info(f"Migration job {job_id} submitted: {workload_name} R{source_rack_id}→R{target_rack_id}")
+            logger.info(
+                f"Migration job {job_id} submitted: {workload_name} R{source_rack_id}→R{target_rack_id}"
+            )
             return job_id
         except requests.RequestException as e:
             logger.error(f"trigger_workload_migration failed: {e}")
@@ -190,7 +208,9 @@ class DellOMEClient:
             logger.error(f"get_job_status failed: {e}")
             return None
 
-    def wait_for_job(self, job_id: int, poll_interval: int = 10, max_wait: int = 300) -> str:
+    def wait_for_job(
+        self, job_id: int, poll_interval: int = 10, max_wait: int = 300
+    ) -> str:
         """Block until job completes or times out."""
         elapsed = 0
         while elapsed < max_wait:
