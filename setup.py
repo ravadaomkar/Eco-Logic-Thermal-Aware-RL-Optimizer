@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name="eco-logic",
     version="2.1.0",
-    description="Thermal-Aware RL Optimizer for Dell PowerCool Data Centers",
-    author="Innomatics Research Labs",
+    description="Thermal-Aware RL Optimizer for PowerCool Data Centers",
+    author="Ravada Omkar",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.10",
