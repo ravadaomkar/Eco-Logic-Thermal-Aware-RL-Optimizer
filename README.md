@@ -84,7 +84,7 @@ eco-logic/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/<your-username>/eco-logic.git
+git clone https://github.com/<ravadaomkar>/Eco-Logic-Thermal-Aware-RL-Optimizer.git
 cd eco-logic
 pip install -r requirements.txt
 ```
@@ -198,14 +198,3 @@ pytest tests/ -v
 ```
 
 ---
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE)
-
----
-
-## 🙏 Acknowledgements
-
-Built during the **Data Science with Gen AI Internship** at **Innomatics Research Labs** (Dec 2025 – Feb 2026).  
-Infrastructure powered by **Dell PowerCool** liquid cooling and **OpenManage Enterprise**.
