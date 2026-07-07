@@ -1,6 +1,6 @@
 """
 eco-logic/src/api/datacentre_ome.py
-Dell OpenManage Enterprise REST API client.
+OpenManage Enterprise REST API client.
 Fetches live rack telemetry and triggers workload migration jobs.
 """
 
