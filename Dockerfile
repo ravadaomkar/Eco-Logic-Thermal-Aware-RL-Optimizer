@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-LABEL maintainer="Innomatics Research Labs"
+LABEL maintainer="Omkar"
 LABEL description="Eco-Logic: Thermal-Aware RL Optimizer"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
