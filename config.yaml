@@ -2,11 +2,11 @@
 project:
   name: "Eco-Logic Thermal-Aware RL Optimizer"
   version: "2.1.0"
-  author: "Innomatics Research Labs"
+  author: "Ravada Omkar"
 
 datacenter:
-  rack_rows: 8
-  rack_cols: 8
+  rack_rows: 20
+  rack_cols: 20
   ambient_temp_c: 22.0
   critical_temp_c: 85.0
   target_pue: 1.20
